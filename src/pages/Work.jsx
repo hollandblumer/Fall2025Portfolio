@@ -5,6 +5,10 @@ import ElasticMenu from "../components/nav/ElasticMenu";
 import VideoCloth from "../components/VideoCloth";
 import FilmGrainLayer from "../components/textures/FilmGrainLayer";
 import LoadingBlobs from "../components/loading/LoadingBlobs.jsx";
+import VideoSmear from "../components/VideoSmear.jsx";
+import VideoStretch from "../components/VideoStretch.jsx";
+import VideoStretchErrorBoundary from "../components/VideoStretchErrorBoundary.jsx";
+import VideoLiquidErrorBoundary from "../components/VideoLiquidErrorBoundary.jsx";
 
 // src/pages/Work.jsx
 export const projects = [
@@ -273,13 +277,13 @@ export default function Work() {
                 to={targetLink}
                 className="project-card-link"
               >
-                <VideoCloth
+                <VideoLiquidErrorBoundary
                   videoSrc={project.videoSrc}
                   title={project.title}
                   posterSrc={project.posterSrc}
                 >
                   <p className="project-desc">{project.description}</p>
-                </VideoCloth>
+                </VideoLiquidErrorBoundary>
               </Link>
             ) : null;
           })}
