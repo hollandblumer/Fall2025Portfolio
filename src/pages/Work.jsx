@@ -9,7 +9,7 @@ import VideoSmear from "../components/VideoSmear.jsx";
 import VideoStretch from "../components/VideoStretch.jsx";
 import VideoStretchErrorBoundary from "../components/VideoStretchErrorBoundary.jsx";
 import VideoLiquidErrorBoundary from "../components/VideoLiquidErrorBoundary.jsx";
-
+import VideoStretch2 from "../components/VideoStretch2.jsx";
 // src/pages/Work.jsx
 export const projects = [
   {
@@ -277,13 +277,13 @@ export default function Work() {
                 to={targetLink}
                 className="project-card-link"
               >
-                <VideoLiquidErrorBoundary
+                <VideoStretch2
                   videoSrc={project.videoSrc}
                   title={project.title}
                   posterSrc={project.posterSrc}
                 >
                   <p className="project-desc">{project.description}</p>
-                </VideoLiquidErrorBoundary>
+                </VideoStretch2>
               </Link>
             ) : null;
           })}
