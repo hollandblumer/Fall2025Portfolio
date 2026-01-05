@@ -350,7 +350,7 @@ This project was about more than building a website. It was about crafting an ex
     sections: [
       {
         type: "text",
-        content: `What started as an experiment pushing circles out of the board with 3D extrusion math turned into a checkerboard in motion. While looking for a hero idea for a client with a square-heavy logo, I stumbled onto a falling blocks animation on OpenProcessing and loved its checkered default pattern that was only meant to be a placeholder for an image. I kept that look, added a delay to the movement, carried over the depth from my initial experiment, tweaked the lighting, chose a warm fall palette, and set it to St. Germain for a cozy piano house feel. It ended up looking like the grid was dancing right along with the music.`,
+        content: `While looking for a hero idea for a client with a square-heavy logo, I created a falling blocks animation and loved its checkered default pattern that was only meant to be a placeholder for an image. I kept that look, added a delay to the movement, carried over the depth from my initial experiment, tweaked the lighting, chose a warm fall palette, and set it to St. Germain for a cozy piano house feel. It ended up looking like the grid was dancing right along with the music.`,
       },
       {
         type: "video",

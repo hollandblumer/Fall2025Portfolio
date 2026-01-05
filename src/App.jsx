@@ -5,6 +5,7 @@ import Resume from "./pages/Resume.jsx";
 import Work from "./pages/Work.jsx";
 import Templates from "./pages/Templates.jsx";
 import Contact from "./pages/Contact.jsx";
+import Home2 from "./pages/Home2.jsx";
 import LoadingPage from "./pages/LoadingPage.jsx";
 import ProjectPage from "./pages/projects/ProjectPage.jsx";
 import GAListener from "./components/GAListener.jsx";
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/work/:slug/:page" element={<ProjectPage />} />
           <Route path="/templates" element={<Templates />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/home2" element={<Home2 />} />
         </Route>
       </Routes>
     </GAListener>
