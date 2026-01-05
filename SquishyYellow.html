@@ -2,15 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>
-      Squishy HOLLAND BLUMER – Packed Yellow with Red Edges + Film Grain
-    </title>
+    <title>Squishy HOLLAND – readable first, then pack</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
 
     <style>
       :root {
-        --film-opacity: 0.7; /* overall strength of grain */
-        --film-blend: soft-light; /* soft-light, overlay, multiply, etc. */
+        --film-opacity: 0.7;
+        --film-blend: soft-light;
       }
 
       html,
@@ -19,7 +17,7 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        background: #c5c5c5; /* requested background */
+        background: #c5c5c5;
       }
 
       body {
@@ -29,13 +27,11 @@
         overflow: hidden;
       }
 
-      /* All non-film canvases (p5) */
       canvas {
         display: block;
         touch-action: none;
       }
 
-      /* Fullscreen film layer */
       #filmLayer {
         position: fixed;
         inset: 0;
@@ -59,7 +55,6 @@
 
       const canvas = document.getElementById("filmLayer");
 
-      // Transparent renderer so it just overlays grain
       const renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: false,
@@ -67,15 +62,13 @@
       });
       renderer.setClearColor(0x000000, 0);
 
-      // Simple ortho camera + empty scene (just a flat background for film pass)
       const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x808080); // mid-grey for film texture
+      scene.background = new THREE.Color(0x808080);
       const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
       const composer = new EffectComposer(renderer);
       composer.addPass(new RenderPass(scene, camera));
 
-      // FilmPass(intensity, scanlineIntensity, scanlineCount, grayscale)
       const filmPass = new FilmPass(0.26, 0.24, 648, false);
       composer.addPass(filmPass);
 
@@ -110,10 +103,6 @@
       }
 
       const geometry = {
-        getLineNormal: (x1, y1, x2, y2) => {
-          return { x: y2 - y1, y: -(x2 - x1) };
-        },
-
         limit: (coord, maxLength) => {
           if (!coord) return null;
           let mag = Math.sqrt(coord.x * coord.x + coord.y * coord.y);
@@ -143,7 +132,7 @@
       -------------------------------------------------------- */
 
       class Particle extends Coordinate2D {
-        constructor({ x, y, z, radius, damping, friction, mass, parent }) {
+        constructor({ x, y, radius, damping, friction, mass }) {
           super(x, y);
           this.prevX = x;
           this.prevY = y;
@@ -154,10 +143,7 @@
           this.damping = damping ?? 0.9;
           this.friction = friction ?? 0.1;
           this.mass = mass ?? 1;
-          this.parent = parent;
 
-          this.restX = x;
-          this.restY = y;
           this.restDX = 0;
           this.restDY = 0;
 
@@ -172,11 +158,6 @@
         move(dx, dy) {
           this.x += dx;
           this.y += dy;
-        }
-
-        addForce(fx, fy) {
-          this.vx += fx;
-          this.vy += fy;
         }
 
         testCollision(otherX, otherY, radius) {
@@ -266,9 +247,6 @@
       }
 
       class ChainableParticle extends Particle {
-        setIsRoot(isRoot) {
-          this.isRoot = isRoot;
-        }
         setNextSibling(sibling) {
           this.nextSibling = sibling;
         }
@@ -281,7 +259,6 @@
         constructor(pointA, pointB, len, strength) {
           this.pointA = pointA;
           this.pointB = pointB;
-          this.originalLen = len;
           this.len = len;
           this.strength = strength;
         }
@@ -308,7 +285,7 @@
       }
 
       /* --------------------------------------------------------
-          Spatial hash grid (lazy, allocation-friendly)
+          Spatial hash grid
       -------------------------------------------------------- */
 
       class HashGrid {
@@ -356,9 +333,7 @@
             for (let yi = yi0; yi <= yi1; yi++) {
               const key = this._getKeyByIndices(xi, yi);
               const cell = this.grid.get(key);
-              if (cell) {
-                cell.forEach((item) => result.push(item));
-              }
+              if (cell) cell.forEach((item) => result.push(item));
             }
           }
           return result;
@@ -388,10 +363,6 @@
           this.indexX = newIndexX;
           this.indexY = newIndexY;
         }
-
-        delete() {
-          this.cell.delete(this.item);
-        }
       }
 
       /* --------------------------------------------------------
@@ -405,10 +376,14 @@
       let marginY = 40;
       const PACK_FACTOR = 0.7;
 
-      // growth control
       const GROWTH_RATE = 0.35;
       const MAX_SCALE = 3.8;
       const SQUISH_FRACTION = 0.1;
+
+      // --- readable-first phase ---
+      let buildStartMs = 0;
+      const LAYOUT_MS = 2000; // longer so you can read it
+      const LAYOUT_PULL = 12.0;
 
       let mx, my;
       let blobs = [];
@@ -418,22 +393,66 @@
       let effectiveVertexDistance;
       let letterFont;
 
-      // --- MODIFIED SECTION START (Threshold lowered for iframes) ---
-      // Define a constant for the maximum width to show both words.
-      // Lowered to 480px to account for the iframe only reporting its own dimensions.
       const MAX_WIDTH_FOR_HOLLAND_ONLY = 480;
       let WORD_LINES;
 
+      function smoothstep01(x) {
+        x = constrain(x, 0, 1);
+        return x * x * (3 - 2 * x);
+      }
+
+      // NEW: keep letters in reading order briefly (prevents scrambling)
+      function applyReadingOrderConstraints(sdt) {
+        const tMs = millis() - buildStartMs;
+        if (tMs >= LAYOUT_MS) return;
+
+        const u = tMs / LAYOUT_MS;
+        const fade = 1 - smoothstep01(u);
+
+        // required min center gap between adjacent letters (tweak this)
+        const minGap = effectiveVertexDistance * 22;
+
+        // group by line
+        const byLine = new Map();
+        for (let i = 0; i < blobs.length; i++) {
+          const bl = blobs[i];
+          const key = bl.lineIndex ?? 0;
+          if (!byLine.has(key)) byLine.set(key, []);
+          byLine.get(key).push(bl);
+        }
+
+        byLine.forEach((lineBlobs) => {
+          // sort by intended order
+          lineBlobs.sort((a, b) => (a.posInWord ?? 0) - (b.posInWord ?? 0));
+
+          for (let i = 1; i < lineBlobs.length; i++) {
+            const prev = lineBlobs[i - 1];
+            const curr = lineBlobs[i];
+
+            // if curr is too far left (crossing / compressed), push apart
+            const desired = prev.cx + minGap;
+            const err = desired - curr.cx;
+            if (err > 0) {
+              const push = err * 0.85 * fade * sdt;
+
+              for (let k = 0; k < prev.allParticles.length; k++) {
+                prev.allParticles[k].move(-push, 0);
+              }
+              for (let k = 0; k < curr.allParticles.length; k++) {
+                curr.allParticles[k].move(push, 0);
+              }
+            }
+          }
+        });
+      }
+
       function setWordLines() {
-        // If the iframe's current width is 480px or smaller, only show HOLLAND
         if (windowWidth <= MAX_WIDTH_FOR_HOLLAND_ONLY) {
           WORD_LINES = ["HOLLAND"];
         } else {
-          // Otherwise (iframe is >480px wide, likely on a desktop), show both HOLLAND and BLUMER
           WORD_LINES = ["HOLLAND"];
         }
       }
-      // --- MODIFIED SECTION END ---
 
       function preload() {
         letterFont = loadFont(
@@ -452,12 +471,11 @@
 
       function windowResized() {
         resizeCanvas(windowWidth, windowHeight);
-        // full restart so letters re-grow / re-pack for new size
         buildLetters();
       }
 
       function buildLetters() {
-        setWordLines(); // Determine which words to show based on current iframe size
+        setWordLines();
 
         effectiveVertexDistance = vertexDistanceRel * min(width, height);
 
@@ -477,6 +495,8 @@
         distanceJoints = [];
         blobs = [];
 
+        buildStartMs = millis();
+
         const minLength = min(width, height);
         const radius = minLength * 0.16;
         const fontSize = radius * 2.7;
@@ -487,6 +507,9 @@
         for (let lineIndex = 0; lineIndex < WORD_LINES.length; lineIndex++) {
           const WORD = WORD_LINES[lineIndex];
           const letters = WORD.split("");
+
+          // NEW: position within the word (H=0, O=1, ...)
+          let posInWord = 0;
 
           const infos = letters.map((ch) => {
             if (ch === " ") {
@@ -517,7 +540,6 @@
           const targetWidth = origLineWidth * PACK_FACTOR;
           const lineStartX = (width - targetWidth) / 2;
 
-          // Recalculate vertical positioning based on the actual number of lines
           const totalTextHeight = lineSpacing * (WORD_LINES.length - 1);
           const firstBaseY = height * 0.5 - totalTextHeight * 0.5;
           const baseY = firstBaseY + lineIndex * lineSpacing;
@@ -542,6 +564,15 @@
               letterIndex
             );
 
+            // readable-first target
+            blob.targetX = cx;
+            blob.targetY = cy;
+
+            // NEW: reading order metadata
+            blob.lineIndex = lineIndex;
+            blob.posInWord = posInWord;
+            posInWord++;
+
             blobs.push(blob);
             blob.allParticles.forEach((p) => particles.push(p));
             blob.allJoints.forEach((j) => distanceJoints.push(j));
@@ -560,38 +591,30 @@
         const dt = 1 / 60;
         const sdt = dt / substeps;
 
-        for (let i = particles.length; i--; ) {
-          particles[i].updateClient();
-        }
+        for (let i = particles.length; i--; ) particles[i].updateClient();
 
         for (let sub = 0; sub < substeps; sub++) {
-          // 1. integration
+          // 1) integrate
           for (let i = particles.length; i--; ) {
             const p = particles[i];
-
             const v = geometry.limit(
               { x: p.vx, y: p.vy },
               (effectiveVertexDistance / sdt) * 1.0
             );
             p.vx = v.x;
             p.vy = v.y;
-
             p.update(sdt);
           }
 
-          // 2. joints
-          for (let i = distanceJoints.length; i--; ) {
+          // 2) joints
+          for (let i = distanceJoints.length; i--; )
             distanceJoints[i].update(1);
-          }
 
-          // 3. growth + collision radius
+          // 3) growth + radius update
           for (let b = 0; b < blobs.length; b++) {
             const blob = blobs[b];
-
-            if (blob.growing) {
+            if (blob.growing)
               blob.scale = Math.min(MAX_SCALE, blob.scale + GROWTH_RATE * sdt);
-            }
-
             const rScale = blob.scale;
             for (let i = 0; i < blob.allParticles.length; i++) {
               const p = blob.allParticles[i];
@@ -599,7 +622,7 @@
             }
           }
 
-          // 4. inter-letter collisions
+          // 4) inter-letter collisions
           for (let i = particles.length; i--; ) {
             const p = particles[i];
             const neighbors = hashGrid.query(p.x, p.y, p.radius * 1.1);
@@ -618,13 +641,14 @@
             }
           }
 
-          // 5. shape anchor + CLAMP (anti-spike)
+          // 5) anchor to shape + readable pull
           const anchorK = 5;
           const MAX_STRETCH = 1.05;
 
           for (let b = 0; b < blobs.length; b++) {
             const blob = blobs[b];
 
+            // center
             let cx = 0,
               cy = 0;
             for (let i = 0; i < blob.allParticles.length; i++) {
@@ -636,6 +660,21 @@
             blob.cx = cx;
             blob.cy = cy;
 
+            // readable-first attraction (fades out)
+            const tMs = millis() - buildStartMs;
+            if (tMs < LAYOUT_MS && blob.targetX !== undefined) {
+              const u = tMs / LAYOUT_MS;
+              const fade = 1 - smoothstep01(u);
+
+              const dx = (blob.targetX - blob.cx) * LAYOUT_PULL * fade * sdt;
+              const dy = (blob.targetY - blob.cy) * LAYOUT_PULL * fade * sdt;
+
+              for (let k = 0; k < blob.allParticles.length; k++) {
+                blob.allParticles[k].move(dx, dy);
+              }
+            }
+
+            // shape anchor + clamp
             const s = blob.scale;
 
             let squishSum = 0;
@@ -646,12 +685,12 @@
 
               const targetX = cx + p.restDX * s;
               const targetY = cy + p.restDY * s;
-              const aw = p.anchorWeight !== undefined ? p.anchorWeight : 1.0;
+              const aw = p.anchorWeight ?? 1.0;
 
-              const ax = (targetX - p.x) * anchorK * aw * sdt;
-              const ay = (targetY - p.y) * anchorK * aw * sdt;
-
-              p.move(ax, ay);
+              p.move(
+                (targetX - p.x) * anchorK * aw * sdt,
+                (targetY - p.y) * anchorK * aw * sdt
+              );
 
               const dxCenter = p.x - cx;
               const dyCenter = p.y - cy;
@@ -664,10 +703,7 @@
                 p.y = cy + dyCenter * ratio;
               }
 
-              const dx = p.x - targetX;
-              const dy = p.y - targetY;
-              const off = Math.hypot(dx, dy);
-
+              const off = Math.hypot(p.x - targetX, p.y - targetY);
               const idealR = Math.max(
                 1,
                 Math.hypot(p.restDX * s, p.restDY * s)
@@ -677,13 +713,14 @@
             }
 
             const avgSquish = squishCount > 0 ? squishSum / squishCount : 0;
-
-            if (blob.growing && avgSquish >= SQUISH_FRACTION) {
+            if (blob.growing && avgSquish >= SQUISH_FRACTION)
               blob.growing = false;
-            }
           }
 
-          // 6. blob center repulsion
+          // NEW: enforce left-to-right order briefly (prevents HOLLAND turning into a pile)
+          applyReadingOrderConstraints(sdt);
+
+          // 6) blob center repulsion
           for (let i = 0; i < blobs.length; i++) {
             for (let j = i + 1; j < blobs.length; j++) {
               const bi = blobs[i];
@@ -704,21 +741,18 @@
                 const ox = dx * push;
                 const oy = dy * push;
 
-                for (let k = 0; k < bi.allParticles.length; k++) {
+                for (let k = 0; k < bi.allParticles.length; k++)
                   bi.allParticles[k].move(-ox, -oy);
-                }
-                for (let k = 0; k < bj.allParticles.length; k++) {
+                for (let k = 0; k < bj.allParticles.length; k++)
                   bj.allParticles[k].move(ox, oy);
-                }
               }
             }
           }
 
-          // 7. mouse + bounds
+          // 7) mouse + bounds
           for (let i = particles.length; i--; ) {
             const p = particles[i];
             p.collide(mx, my, mr);
-
             p.constrain(marginX, marginY, width - marginX, height - marginY);
             p.endUpdate(sdt);
           }
@@ -733,23 +767,21 @@
         circle(mx, my, mr * 2 - 2);
         pop();
 
-        for (let i = 0; i < blobs.length; i++) {
-          drawLetter(blobs[i]);
-        }
+        for (let i = 0; i < blobs.length; i++) drawLetter(blobs[i]);
       }
 
       /* --------------------------------------------------------
-          Build Blob – all contours (counters separated)
+          Build Blob – contours
       -------------------------------------------------------- */
 
       function generateLetterBlob(offsetX, offsetY, radius, letter, index) {
         const fontSize = radius * 2.7;
 
         const bounds = letterFont.textBounds(letter, 0, 0, fontSize);
-        const bx = bounds.x;
-        const by = bounds.y;
-        const bw = bounds.w;
-        const bh = bounds.h;
+        const bx = bounds.x,
+          by = bounds.y,
+          bw = bounds.w,
+          bh = bounds.h;
 
         const rawPoints = letterFont.textToPoints(letter, 0, 0, fontSize, {
           sampleFactor: 0.65,
@@ -780,30 +812,30 @@
           const PARTICLE_COLLISION_RADIUS = effectiveVertexDistance * 0.8;
 
           if (currentLoop.length === 0) {
-            const p = new ChainableParticle({
-              x: px,
-              y: py,
-              z: 0,
-              damping: 1,
-              friction: 0.1,
-              radius: PARTICLE_COLLISION_RADIUS,
-              mass: 1,
-            });
-            currentLoop.push(p);
-          } else {
-            const last = currentLoop[currentLoop.length - 1];
-            const d = dist(last.x, last.y, px, py);
-            if (d >= effectiveVertexDistance * 1.0) {
-              const p = new ChainableParticle({
+            currentLoop.push(
+              new ChainableParticle({
                 x: px,
                 y: py,
-                z: 0,
                 damping: 1,
                 friction: 0.1,
                 radius: PARTICLE_COLLISION_RADIUS,
                 mass: 1,
-              });
-              currentLoop.push(p);
+              })
+            );
+          } else {
+            const last = currentLoop[currentLoop.length - 1];
+            const d = dist(last.x, last.y, px, py);
+            if (d >= effectiveVertexDistance * 1.0) {
+              currentLoop.push(
+                new ChainableParticle({
+                  x: px,
+                  y: py,
+                  damping: 1,
+                  friction: 0.1,
+                  radius: PARTICLE_COLLISION_RADIUS,
+                  mass: 1,
+                })
+              );
             }
           }
         }
@@ -818,12 +850,8 @@
           if (loop.length < 3) continue;
 
           loop.forEach((v, i, arr) => {
-            const vprev = arr[(i - 1 + arr.length) % arr.length];
-            const vnext = arr[(i + 1) % arr.length];
-
-            v.setPrevSibling(vprev);
-            v.setNextSibling(vnext);
-            if (i === 0) v.setIsRoot(true);
+            v.setPrevSibling(arr[(i - 1 + arr.length) % arr.length]);
+            v.setNextSibling(arr[(i + 1) % arr.length]);
             v.setClient(hashGrid.createClient(v));
 
             v.radius = effectiveVertexDistance * 1.8;
@@ -850,6 +878,7 @@
               return [joint1, joint2];
             })
             .flat();
+
           letterJoints.push(...currentLoopJoints);
           processedLoops.push(loop);
         }
@@ -874,21 +903,27 @@
         const blob = {
           area,
           currentArea: area,
-          areaDiff: 0,
           allParticles: letterParticles,
           allJoints: letterJoints,
           radius,
           color: color(col[0], col[1], col[2]),
-          restCX: 0,
-          restCY: 0,
           cx: 0,
           cy: 0,
+          restCX: 0,
+          restCY: 0,
           maxDist: 0,
-          scale: 1, // back to original: start at 1 and grow
+          scale: 1,
           growing: true,
           loops: processedLoops,
+
+          // readable-first targets / metadata (filled in buildLetters)
+          targetX: undefined,
+          targetY: undefined,
+          lineIndex: 0,
+          posInWord: 0,
         };
 
+        // center + rest offsets
         let cx = 0,
           cy = 0;
         letterParticles.forEach((p) => {
@@ -905,18 +940,13 @@
         letterParticles.forEach((p) => {
           p.restDX = p.x - cx;
           p.restDY = p.y - cy;
-          const d = Math.sqrt(p.restDX * p.restDX + p.restDY * p.restDY);
-          if (d > maxDist) maxDist = d;
+          maxDist = Math.max(maxDist, Math.hypot(p.restDX, p.restDY));
         });
         blob.maxDist = maxDist;
 
         letterParticles.forEach((p) => {
-          const d =
-            maxDist > 0
-              ? Math.sqrt(p.restDX * p.restDX + p.restDY * p.restDY) / maxDist
-              : 1;
+          const d = maxDist > 0 ? Math.hypot(p.restDX, p.restDY) / maxDist : 1;
           const t = constrain(d, 0, 1);
-
           p.squishWeight = constrain(map(t, 0, 1, 0.7, 1.4), 0.7, 1.4);
           p.anchorWeight = constrain(map(t, 0, 1, 1.6, 0.45), 0.45, 1.6);
         });
@@ -925,13 +955,12 @@
       }
 
       /* --------------------------------------------------------
-          Rendering – cream fill with proper counters + strokes
+          Rendering – cream fill with counters + strokes
       -------------------------------------------------------- */
 
       function drawLetter(blob) {
         if (!blob.loops || blob.loops.length === 0) return;
 
-        // 1) Build smoothed curve point sets for every contour (outer + holes)
         const contours = [];
 
         for (let li = 0; li < blob.loops.length; li++) {
@@ -941,15 +970,10 @@
           const len = contour.length;
           let smooth = new Array(len);
 
-          // copy positions
-          for (let i = 0; i < len; i++) {
-            const p = contour[i];
-            smooth[i] = { x: p.x, y: p.y };
-          }
+          for (let i = 0; i < len; i++)
+            smooth[i] = { x: contour[i].x, y: contour[i].y };
 
-          // smoothing passes
-          const passes = 4;
-          for (let k = 0; k < passes; k++) {
+          for (let k = 0; k < 4; k++) {
             const tmp = new Array(len);
             for (let i = 0; i < len; i++) {
               const prev = smooth[(i - 1 + len) % len];
@@ -963,61 +987,46 @@
             smooth = tmp;
           }
 
-          // wrap for curve continuity
           const curvePts = [];
-          curvePts.push(smooth[len - 2]);
-          curvePts.push(smooth[len - 1]);
-          for (let i = 0; i < len; i++) {
-            curvePts.push(smooth[i]);
-          }
-          curvePts.push(smooth[0]);
-          curvePts.push(smooth[1]);
-
+          curvePts.push(smooth[len - 2], smooth[len - 1]);
+          for (let i = 0; i < len; i++) curvePts.push(smooth[i]);
+          curvePts.push(smooth[0], smooth[1]);
           contours.push(curvePts);
         }
 
         if (contours.length === 0) return;
 
-        // 2) FILL using canvas 2D even-odd rule so counters punch out
-        const ctx = drawingContext; // p5's underlying canvas context
+        const ctx = drawingContext;
         ctx.save();
-        ctx.fillStyle = "#F7E9A9"; // cream fill
+        ctx.fillStyle = "#F7E9A9";
         ctx.beginPath();
 
         contours.forEach((curvePts) => {
-          if (!curvePts.length) return;
           ctx.moveTo(curvePts[0].x, curvePts[0].y);
-          for (let i = 1; i < curvePts.length; i++) {
-            const pt = curvePts[i];
-            ctx.lineTo(pt.x, pt.y);
-          }
+          for (let i = 1; i < curvePts.length; i++)
+            ctx.lineTo(curvePts[i].x, curvePts[i].y);
           ctx.closePath();
         });
 
-        // key: 'evenodd' makes inner loops become holes
         ctx.fill("evenodd");
         ctx.restore();
 
-        // 3) STROKES
-        const drawStroke = (curvePts, sw, r, g, b) => {
-          stroke(r, g, b);
+        const drawStroke = (curvePts, sw) => {
+          stroke(247, 233, 169);
           strokeWeight(sw);
           strokeJoin(ROUND);
           strokeCap(ROUND);
           noFill();
           beginShape();
-          for (let i = 0; i < curvePts.length; i++) {
-            const pt = curvePts[i];
-            curveVertex(pt.x, pt.y);
-          }
+          for (let i = 0; i < curvePts.length; i++)
+            curveVertex(curvePts[i].x, curvePts[i].y);
           endShape();
         };
 
         push();
-        // outer + inner stroke, both in cream to get that fat noodle edge
         contours.forEach((curvePts) => {
-          drawStroke(curvePts, 16, 247, 233, 169);
-          drawStroke(curvePts, 5, 247, 233, 169);
+          drawStroke(curvePts, 16);
+          drawStroke(curvePts, 5);
         });
         pop();
       }
