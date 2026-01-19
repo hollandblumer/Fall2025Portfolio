@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Springy Blob Text with Real Counters</title>
+    <title>Springy Blob Text - Holland Blumer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
     <style>
       html,
@@ -19,37 +19,23 @@
   </head>
   <body>
     <script>
-      /* ================================
-         URL PARAMS (TEXT + SCALE)
-      ================================ */
-
       const params = new URLSearchParams(window.location.search);
-
-      // NOTE: If you pass "HOLLAND%20BLUMER" it will decode to "HOLLAND BLUMER"
-      const TEXT_STRING = params.get("text") || "WORK";
+      const TEXT_STRING = params.get("text") || "HOLLAND BLUMER";
 
       const DEFAULT_SCALE = 3.7;
       let scaleRaw = parseFloat(params.get("scale"));
       if (Number.isNaN(scaleRaw)) scaleRaw = DEFAULT_SCALE;
 
-      // Clamp so we don't get absurd values that generate tons of points
-      const SCALE_MULTIPLIER = Math.min(Math.max(scaleRaw, 2.5), 5.0);
-
-      /* ================================
-         CONFIG
-      ================================ */
+      // Expanded range to allow larger letters for long names
+      const SCALE_MULTIPLIER = Math.min(Math.max(scaleRaw, 2.0), 8.0);
 
       let letterFont;
       const FONT_URL =
         "https://assets.codepen.io/9259849/RubikMonoOne-Regular_1.ttf";
-
       const vertexDistanceRel = 0.008;
       let effectiveVertexDistance;
 
-      /* ================================
-         Spring physics
-      ================================ */
-
+      /* Physics Classes */
       class Point {
         constructor(x, y) {
           this.x = x;
@@ -64,24 +50,18 @@
           return [this.x - p.x, this.y - p.y];
         }
         distance(p) {
-          const dx = p.x - this.x;
-          const dy = p.y - this.y;
-          return Math.sqrt(dx * dx + dy * dy);
+          return dist(this.x, this.y, p.x, p.y);
         }
       }
 
-      const ELASTICITY = 0.03;
-      const DAMPING = 0.75;
-      const MASS = 2;
-      const ADJACENT_SPRING_CONSTANT = 0.1;
-
-      let MOUSE_STRENGTH = 0.7;
-      let MOUSE_RADIUS;
-
-      // subtle automatic wobble
+      const ELASTICITY = 0.03,
+        DAMPING = 0.75,
+        MASS = 2,
+        ADJACENT_SPRING_CONSTANT = 0.1;
+      let MOUSE_STRENGTH = 0.7,
+        MOUSE_RADIUS;
       const AUTO_WOBBLE_STRENGTH = 0.4;
 
-      /** A spring point that behaves like your PolyWave springs */
       class Spring extends Point {
         constructor({
           x,
@@ -102,24 +82,21 @@
           this.damping = damping;
           this.attractors = [];
         }
-
         applyForce(x, y) {
           this.fx += x;
           this.fy += y;
         }
-
         addAttractor(p) {
           this.attractors.push(p);
         }
-
         setForceFromAttractors() {
           this.attractors.forEach((p) => {
-            const fx = ADJACENT_SPRING_CONSTANT * p.vx;
-            const fy = ADJACENT_SPRING_CONSTANT * p.vy;
-            this.applyForce(fx, fy);
+            this.applyForce(
+              ADJACENT_SPRING_CONSTANT * p.vx,
+              ADJACENT_SPRING_CONSTANT * p.vy
+            );
           });
         }
-
         applyForceFromMouse(pointer) {
           const distance = this.distance(pointer.position);
           if (distance < MOUSE_RADIUS) {
@@ -128,36 +105,27 @@
             this.applyForce(dx * power, dy * power);
           }
         }
-
-        // small noise-based wobble so it moves without user interaction
         applyAutoWobble() {
           const t = frameCount * 0.01;
           const nx = noise(this.ox * 0.01, this.oy * 0.01, t);
-          const ny = noise(this.ox * 0.01 + 100.0, this.oy * 0.01 + 100.0, t);
-          const ax = (nx - 0.5) * AUTO_WOBBLE_STRENGTH;
-          const ay = (ny - 0.5) * AUTO_WOBBLE_STRENGTH;
-          this.applyForce(ax, ay);
+          const ny = noise(this.ox * 0.01 + 100, this.oy * 0.01 + 100, t);
+          this.applyForce(
+            (nx - 0.5) * AUTO_WOBBLE_STRENGTH,
+            (ny - 0.5) * AUTO_WOBBLE_STRENGTH
+          );
         }
-
         setSpringForce() {
-          const fx = (this.ox - this.x) * this.elasticity;
-          const fy = (this.oy - this.y) * this.elasticity;
-          this.fx += fx;
-          this.fy += fy;
+          this.fx += (this.ox - this.x) * this.elasticity;
+          this.fy += (this.oy - this.y) * this.elasticity;
         }
-
         solveVelocity() {
-          if (this.fx === 0 && this.fy === 0) return;
-          const ax = this.fx / this.mass;
-          const ay = this.fy / this.mass;
-          this.vx = this.damping * this.vx + ax;
-          this.vy = this.damping * this.vy + ay;
+          this.vx = this.damping * this.vx + this.fx / this.mass;
+          this.vy = this.damping * this.vy + this.fy / this.mass;
           this.x += this.vx;
           this.y += this.vy;
           this.fx = 0;
           this.fy = 0;
         }
-
         update(pointer) {
           this.setForceFromAttractors();
           this.applyForceFromMouse(pointer);
@@ -166,10 +134,6 @@
           this.solveVelocity();
         }
       }
-
-      /* ================================
-         Pointer
-      ================================ */
 
       class SpringPointer {
         constructor(x, y) {
@@ -185,21 +149,12 @@
         }
       }
 
-      /* ================================
-         Global state
-      ================================ */
-
-      let pointer;
-      let springs = [];
-      let blobs = [];
-
-      // --- NEW: "design space" so we can be wider than the window/iframe ---
-      let designW, designH;
-      let viewScale = 1;
-
-      /* ================================
-         p5 lifecycle
-      ================================ */
+      let pointer,
+        springs = [],
+        blobs = [],
+        designW,
+        designH,
+        viewScale = 1;
 
       function preload() {
         letterFont = loadFont(FONT_URL);
@@ -207,88 +162,55 @@
 
       function setup() {
         createCanvas(windowWidth, windowHeight);
-        pixelDensity(1);
-        colorMode(RGB, 255);
-        background("#c5c5c5");
-        noStroke();
-
-        // A wider internal canvas so long text (HOLLAND BLUMER) fits.
-        // Increase 1600 if you want even more breathing room.
-        designW = max(windowWidth, 1600);
-        designH = windowHeight;
-
-        effectiveVertexDistance = vertexDistanceRel * min(designW, designH);
-        MOUSE_RADIUS = min(designW, designH) * 0.18;
-
-        pointer = new SpringPointer(designW / 2, designH / 2);
-
         buildLetters();
       }
 
       function windowResized() {
         resizeCanvas(windowWidth, windowHeight);
-        background("#c5c5c5");
-
-        // Keep designW wide; update height to match
-        designH = windowHeight;
-
-        effectiveVertexDistance = vertexDistanceRel * min(designW, designH);
-        MOUSE_RADIUS = min(designW, designH) * 0.18;
-
-        pointer = new SpringPointer(designW / 2, designH / 2);
-
         buildLetters();
       }
-
-      /* ================================
-         Build per-letter blobs
-      ================================ */
 
       function buildLetters() {
         springs = [];
         blobs = [];
 
-        const minLength = min(designW, designH);
-        const radius = minLength * 0.16;
+        // Base sizing
+        const baseRef = min(windowWidth, windowHeight);
+        const radius = baseRef * 0.16;
         const fontSize = radius * SCALE_MULTIPLIER;
 
-        const text = TEXT_STRING;
-        const chars = text.split("");
-
-        const charInfos = chars.map((ch) => {
+        // Measure text to define designW dynamically
+        const charInfos = TEXT_STRING.split("").map((ch) => {
           if (ch === " ")
-            return { char: " ", width: radius * 0.8, isSpace: true };
+            return { char: " ", width: fontSize * 0.3, isSpace: true };
           const b = letterFont.textBounds(ch, 0, 0, fontSize);
           return { char: ch, width: b.w, isSpace: false };
         });
 
-        const LETTER_GAP = radius * 0.25;
+        const LETTER_GAP = fontSize * 0.05;
+        let totalTextW = charInfos.reduce(
+          (acc, cur, i) =>
+            acc + cur.width + (i < charInfos.length - 1 ? LETTER_GAP : 0),
+          0
+        );
 
-        let totalW = 0;
-        for (let i = 0; i < charInfos.length; i++) {
-          totalW += charInfos[i].width;
-          if (i < charInfos.length - 1) totalW += LETTER_GAP;
-        }
+        // Adjust design space to fit the text + padding
+        designW = totalTextW + windowWidth * 0.2;
+        designH = windowHeight;
 
-        // Keep a little padding inside the design space
-        const targetWidth = min(totalW, designW * 0.9);
-        const scaleX = targetWidth / totalW;
+        effectiveVertexDistance = vertexDistanceRel * min(designW, designH);
+        MOUSE_RADIUS = min(designW, designH) * 0.15;
+        pointer = new SpringPointer(designW / 2, designH / 2);
 
-        const lineStartX = (designW - targetWidth) / 2;
+        let xCursor = (designW - totalTextW) / 2;
         const baseY = designH * 0.55;
 
-        let xCursor = 0;
-        for (let i = 0; i < charInfos.length; i++) {
-          const info = charInfos[i];
-
+        charInfos.forEach((info, i) => {
           if (info.isSpace) {
-            xCursor += info.width;
-            if (i < charInfos.length - 1) xCursor += LETTER_GAP;
-            continue;
+            xCursor += info.width + LETTER_GAP;
+            return;
           }
-
-          const cx = lineStartX + (xCursor + info.width / 2) * scaleX;
-
+          const cx = xCursor + info.width / 2;
           const blobLoops = generateLetterLoops(
             cx,
             baseY,
@@ -297,189 +219,72 @@
             fontSize
           );
           blobs.push({ loops: blobLoops });
-
           blobLoops.forEach((loop) => {
-            loop.forEach((s) => springs.push(s));
+            springs.push(...loop);
+            loop.forEach((s, j) => {
+              s.addAttractor(loop[(j - 1 + loop.length) % loop.length]);
+              s.addAttractor(loop[(j + 1) % loop.length]);
+            });
           });
-
-          xCursor += info.width;
-          if (i < charInfos.length - 1) xCursor += LETTER_GAP;
-        }
-
-        // Hook up neighboring attractors per loop
-        blobs.forEach((blob) => {
-          blob.loops.forEach((loop) => {
-            const len = loop.length;
-            if (len < 2) return;
-            for (let i = 0; i < len; i++) {
-              const curr = loop[i];
-              const prev = loop[(i - 1 + len) % len];
-              const next = loop[(i + 1) % len];
-              curr.addAttractor(prev);
-              curr.addAttractor(next);
-            }
-          });
+          xCursor += info.width + LETTER_GAP;
         });
       }
 
       function generateLetterLoops(offsetX, offsetY, radius, letter, fontSize) {
         const bounds = letterFont.textBounds(letter, 0, 0, fontSize);
-        const bx = bounds.x;
-        const by = bounds.y;
-        const bw = bounds.w;
-        const bh = bounds.h;
-
-        const rawPoints = letterFont.textToPoints(letter, 0, 0, fontSize, {
-          sampleFactor: 0.6,
-          simplifyThreshold: 0,
+        const pts = letterFont.textToPoints(letter, 0, 0, fontSize, {
+          sampleFactor: 0.5,
         });
-
         const allLoops = [];
         let currentLoop = [];
-        let lastRaw = null;
 
-        const breakThreshold = effectiveVertexDistance * 8;
-
-        for (let i = 0; i < rawPoints.length; i++) {
-          const pt = rawPoints[i];
-
-          if (lastRaw) {
-            const rawD = dist(lastRaw.x, lastRaw.y, pt.x, pt.y);
-            if (rawD > breakThreshold && currentLoop.length > 0) {
-              allLoops.push(currentLoop);
-              currentLoop = [];
-            }
+        for (let i = 0; i < pts.length; i++) {
+          if (
+            i > 0 &&
+            dist(pts[i].x, pts[i].y, pts[i - 1].x, pts[i - 1].y) > 20
+          ) {
+            if (currentLoop.length > 2) allLoops.push(currentLoop);
+            currentLoop = [];
           }
-          lastRaw = { x: pt.x, y: pt.y };
-
-          const px = pt.x - bx - bw * 0.5 + offsetX;
-          const py = pt.y - by - bh * 0.5 + offsetY;
-
-          const PARTICLE_SPACING = effectiveVertexDistance * 1.0;
-
-          if (currentLoop.length === 0) {
-            const s = new Spring({
-              x: px,
-              y: py,
+          currentLoop.push(
+            new Spring({
+              x: pts[i].x - bounds.x - bounds.w / 2 + offsetX,
+              y: pts[i].y - bounds.y - bounds.h / 2 + offsetY,
               elasticity: random(0.02, 0.04),
               damping: random(0.7, 0.8),
-            });
-            currentLoop.push(s);
-          } else {
-            const last = currentLoop[currentLoop.length - 1];
-            const d = dist(last.x, last.y, px, py);
-            if (d >= PARTICLE_SPACING) {
-              const s = new Spring({
-                x: px,
-                y: py,
-                elasticity: random(0.02, 0.04),
-                damping: random(0.7, 0.8),
-              });
-              currentLoop.push(s);
-            }
-          }
+            })
+          );
         }
-
-        if (currentLoop.length > 0) allLoops.push(currentLoop);
-
-        const processedLoops = allLoops.filter((loop) => loop.length >= 3);
-        return processedLoops;
+        if (currentLoop.length > 2) allLoops.push(currentLoop);
+        return allLoops;
       }
-
-      /* ================================
-         Draw
-      ================================ */
 
       function draw() {
         background("#c5c5c5");
+        viewScale = windowWidth / designW; // Force width-based scaling
 
-        // Scale the wide design space down to fit the real canvas
-        viewScale = min(width / designW, height / designH);
-
-        // Convert mouse into design-space coords
         const mx = mouseX / viewScale;
         const my = mouseY / viewScale;
-
         pointer.updateFromMouse(mx, my);
 
         push();
         scale(viewScale);
-
-        noFill();
-        stroke(165, 165, 165, 90);
-        strokeWeight(1.5 / viewScale);
-        circle(pointer.position.x, pointer.position.y, MOUSE_RADIUS * 0.8);
-
-        for (let i = 0; i < springs.length; i++) {
-          springs[i].update(pointer);
-        }
-
-        for (let b = 0; b < blobs.length; b++) {
-          drawLetterBlob(blobs[b]);
-        }
-
+        springs.forEach((s) => s.update(pointer));
+        blobs.forEach(drawLetterBlob);
         pop();
       }
 
       function drawLetterBlob(blob) {
-        if (!blob.loops || blob.loops.length === 0) return;
-
-        const contours = [];
-
-        for (let li = 0; li < blob.loops.length; li++) {
-          const contour = blob.loops[li];
-          if (contour.length < 3) continue;
-
-          const len = contour.length;
-          let smooth = new Array(len);
-
-          for (let i = 0; i < len; i++) {
-            const p = contour[i];
-            smooth[i] = { x: p.x, y: p.y };
-          }
-
-          const passes = 4;
-          for (let k = 0; k < passes; k++) {
-            const tmp = new Array(len);
-            for (let i = 0; i < len; i++) {
-              const prev = smooth[(i - 1 + len) % len];
-              const curr = smooth[i];
-              const next = smooth[(i + 1) % len];
-              tmp[i] = {
-                x: (prev.x + curr.x * 2 + next.x) / 4,
-                y: (prev.y + curr.y * 2 + next.y) / 4,
-              };
-            }
-            smooth = tmp;
-          }
-
-          const curvePts = [];
-          curvePts.push(smooth[len - 2]);
-          curvePts.push(smooth[len - 1]);
-          for (let i = 0; i < len; i++) curvePts.push(smooth[i]);
-          curvePts.push(smooth[0]);
-          curvePts.push(smooth[1]);
-
-          contours.push(curvePts);
-        }
-
-        if (!contours.length) return;
-
         const ctx = drawingContext;
         ctx.save();
         ctx.fillStyle = "#F7EAAC";
         ctx.beginPath();
-
-        contours.forEach((curvePts) => {
-          if (!curvePts.length) return;
-          ctx.moveTo(curvePts[0].x, curvePts[0].y);
-          for (let i = 1; i < curvePts.length; i++) {
-            const pt = curvePts[i];
-            ctx.lineTo(pt.x, pt.y);
-          }
+        blob.loops.forEach((loop) => {
+          ctx.moveTo(loop[0].x, loop[0].y);
+          for (let i = 1; i < loop.length; i++)
+            ctx.lineTo(loop[i].x, loop[i].y);
           ctx.closePath();
         });
-
         ctx.fill("evenodd");
         ctx.restore();
       }

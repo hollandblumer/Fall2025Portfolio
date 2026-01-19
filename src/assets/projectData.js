@@ -399,6 +399,57 @@ This project was about more than building a website. It was about crafting an ex
       },
     ],
   },
+
+  floatinglibrary: {
+    slug: "floatinglibrary",
+    title: "Floating Library for Steven Shorkey",
+    tagLine:
+      "A Three.js hero concept designed for an author looking beyond traditional book websites.",
+    palette: { bg: "#e4eeefff", ink: "#101010ff" },
+    hero: {
+      video: "PASTE_FLOATING_LIBRARY_VIDEO_URL_HERE",
+      alt: "Floating Library Three.js hero animation for Steven Shorkey",
+    },
+    sections: [
+      {
+        type: "video",
+        src: "https://hollandblumer.github.io/portfolio_videos/floatinglibrary.mp4",
+        caption:
+          "Floating Library hero animation designed for author Steven Shorkey",
+        loop: true,
+      },
+      {
+        type: "text",
+        content: `Steven Shorkey, an author and writer, came to me after seeing Meredith Norvell’s website. He was drawn to the way her site used motion and interaction to feel expressive without being overwhelming, and he wanted that same sense of intention for his own author website.
+
+From the start, Steven was clear that he didn’t want something conventional. He’s outdoorsy, drawn to greens and blues, but also deeply interested in new technology and what’s next. His goal was an author site that felt current and forward-thinking, not static or overly bookish.`,
+      },
+      {
+        type: "text",
+        content: `That combination shaped the direction immediately. I wanted to build a hero that leaned into atmosphere and dimension, something that would set the tone the moment you landed on the site. I also wanted an excuse to explore Three.js in a way that felt purposeful and grounded in real use, not just visual experimentation.
+
+I started with the idea of a library, then stripped it back to its essence. Instead of shelves or a literal room, I designed a floating collection of books suspended in space.`,
+      },
+      {
+        type: "text",
+        content: `Each book drifts slowly, rotating just enough to create a sense of depth and movement. The animation is calm and continuous, designed to feel more like presence than performance. I treated the scene like a physical installation, focusing on spacing, balance, and restraint.
+
+Lighting and environment did much of the work. I used soft fog to add depth and separation, allowing the books to fade gently in and out of space, and kept the lighting simple so the scene felt natural rather than theatrical. The palette leaned into cool greens and blues to align with Steven’s taste and outdoorsy sensibility.`,
+      },
+      {
+        type: "text",
+        content: `This project was also about pushing myself technically. I wanted to work in Three.js in a way that felt intentional and viable for an author website. Every decision, from camera framing to motion speed, was made with the idea that this could live as a real hero moment, not just a standalone experiment.
+
+The Floating Library became a way to explore how 3D can bring atmosphere and dimension to an author’s online presence without distracting from the writing itself.`,
+      },
+      {
+        type: "text",
+        content: `After sharing the project on CodePen, it was featured and received over 100 likes, reinforcing that there’s an appetite for subtle, spatial interactions on the web.
+
+Ultimately, this piece represents a shift in how I think about author websites and hero sections, and how Three.js can be used thoughtfully to create modern, expressive digital spaces.`,
+      },
+    ],
+  },
 };
 
 export default projectData;
