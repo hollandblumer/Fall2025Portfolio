@@ -59,7 +59,7 @@ export const projects = [
     id: 5,
     slug: "chargepoint",
     categories: ["featured", "research"],
-    title: "Automated Quality Assurance System for ChargePoint",
+    title: "React/AWS Dashboard for ChargePoint",
     description: "Microscopic UV-monitoring wearable",
     type: "image",
     imageSrc: new URL("../assets/images/chargepoint.png", import.meta.url).href,
@@ -100,7 +100,7 @@ export const projects = [
     id: 9,
     slug: "3dslicescountdown",
     categories: ["featured", "creative"],
-    title: "3D Slices Countdown",
+    title: "3D Slices Countdown with Three.js",
     description:
       "A 3D countdown built from vertical ribbons that extrude forward to reveal each digit. Each ribbon samples a blurred digit field and offsets its geometry by row, creating a soft carved edge. I originally wanted to add stronger contour-line bands, but ended up keeping a subtle halo-like contour around the number for a calmer, more sculptural read.",
     type: "video",
@@ -304,7 +304,7 @@ export default function Work() {
                 </Link>
               </li>
               <li>
-                <Link to="/#about" onClick={() => setMenuOpen(false)}>
+                <Link to="/home#about" onClick={() => setMenuOpen(false)}>
                   About
                 </Link>
               </li>
@@ -322,7 +322,7 @@ export default function Work() {
                 </a>
               </li>
               <li>
-                <a href="/" onClick={() => setMenuOpen(false)}>
+                <a href="/home" onClick={() => setMenuOpen(false)}>
                   Home
                 </a>
               </li>

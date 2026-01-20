@@ -217,7 +217,7 @@ export default function Home() {
               </a>
             </li>
             <li>
-              <a href="#about" onClick={() => setMenuOpen(false)}>
+              <a href="/home#about" onClick={() => setMenuOpen(false)}>
                 About
               </a>{" "}
             </li>

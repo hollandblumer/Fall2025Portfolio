@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import Home from "./pages/Home.jsx";
 import Resume from "./pages/Resume.jsx";
@@ -18,7 +18,8 @@ export default function App() {
 
         {/* everything else inside Layout */}
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/work" replace />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/resume" element={<Resume />} />
           <Route path="/work" element={<Work />} />
           <Route path="/work/:slug" element={<ProjectPage />} />

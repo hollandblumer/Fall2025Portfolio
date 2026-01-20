@@ -142,7 +142,7 @@ export default function Work() {
   }, [isLoading]);
 
   const visibleProjects = projects.filter((project) =>
-    activeFilter === "all" ? true : project.categories.includes(activeFilter)
+    activeFilter === "all" ? true : project.categories.includes(activeFilter),
   );
 
   return (
@@ -201,7 +201,7 @@ export default function Work() {
                 </Link>
               </li>
               <li>
-                <Link to="/#about" onClick={() => setMenuOpen(false)}>
+                <Link to="/home#about" onClick={() => setMenuOpen(false)}>
                   About
                 </Link>
               </li>
@@ -219,7 +219,7 @@ export default function Work() {
                 </a>
               </li>
               <li>
-                <a href="/" onClick={() => setMenuOpen(false)}>
+                <a href="/home" onClick={() => setMenuOpen(false)}>
                   Home
                 </a>
               </li>

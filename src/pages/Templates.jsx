@@ -112,7 +112,7 @@ export default function Templates() {
               </Link>
             </li>
             <li>
-              <Link to="/#about" onClick={() => setMenuOpen(false)}>
+              <Link to="/home#about" onClick={() => setMenuOpen(false)}>
                 About
               </Link>
             </li>
@@ -130,7 +130,7 @@ export default function Templates() {
               </a>
             </li>
             <li>
-              <a href="/" onClick={() => setMenuOpen(false)}>
+              <a href="/home" onClick={() => setMenuOpen(false)}>
                 Home
               </a>
             </li>

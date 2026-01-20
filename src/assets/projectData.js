@@ -173,7 +173,7 @@ Off the bat, I knew the color scheme would lean blue. I landed on a muted, cool 
     slug: "katherinegroverfinejewelry",
     title: "Canvas of Jewels for Katherine Grover Fine Jewelry",
     tagLine:
-      "A custom canvas particle animation that uses jewelry designs as interactive particles to form a map of Nantucket.",
+      "A custom canvas-based particle system that uses jewels as interactive particles to form Nantucket Island",
     palette: { bg: "#f4f4f4ff", ink: "#131414ff" }, // Placeholder for palette based on fine jewelry/canvas
     hero: {
       video:
@@ -182,25 +182,30 @@ Off the bat, I knew the color scheme would lean blue. I landed on a muted, cool 
     },
     sections: [
       {
-        type: "text",
-        content:
-          "For Katherine Grover Fine Jewelry, I created a custom canvas particle animation that uses her own designs as the particles. These tiny pieces gently drift into place, eventually forming the shape of Nantucket with her signature logo anchored at the center.",
-      },
-      {
         type: "video",
         src: "https://cdn.dribbble.com/userupload/43826090/file/original-8a677209789bca38ccbf0b3c835cccc6.mp4",
-        caption: "The particle animation forming the map of Nantucket.",
+        caption: "The particle animation forming Nantucket.",
         loop: true,
       },
       {
         type: "text",
-        content: `The base code came from a Bricks and Mortar Web tutorial on building an interactive particle logo with canvas and I reversed the particle coverage area. I rebuilt and extended it for high-res screens, mobile responsiveness, and most importantly, custom particle images. Instead of dots or circles, I loaded three pieces from her collection, scaled them down, and mapped them across the canvas using \`getImageData()\` from a reference layer.
-
-The animation responds to mouse and touch.  I also used Greensock’s TweenLite.ticker for smooth animation and randomized easing to keep the motion feeling natural. The canvas is sharp on retina screens, and everything resizes dynamically so the logo always stays centered.
-
-This isn’t just a hero animation. It’s a shimmer, a reveal, a floating tribute to her work.
-
-More particle-based templates like this coming soon.`,
+        content: `**Concept**  
+For Katie, founder of Katherine Grover Fine Jewelry, I created a custom canvas particle animation using her own jewelry designs as the particles. She wanted an animation she could use across email marketing and Instagram ads that maintained a clean, elevated feel while introducing movement.`,
+      },
+      {
+        type: "text",
+        content: `**Approach**  
+I designed the system so the particles form around the shape of Nantucket Island rather than filling it in. Katie’s logo sits in the negative space at the center, giving the composition a clear focal point while keeping the overall layout minimal.`,
+      },
+      {
+        type: "text",
+        content: `**Implementation**  
+The animation is built with a custom canvas particle system adapted from an interactive logo tutorial. I reversed the particle coverage logic, used a base64 island image as a reference mask, and mapped high-resolution jewelry images across the canvas using getImageData(). The motion responds to mouse and touch, runs on GSAP’s ticker for smooth performance, and stays sharp on retina displays.`,
+      },
+      {
+        type: "text",
+        content: `**Outcome**  
+The final animation gave Katie a flexible, high-impact visual she could use across marketing channels. She was thrilled with the result.`,
       },
     ],
   },
@@ -295,7 +300,7 @@ Overall, I’m thrilled with how this piece turned out and hope that it spread l
       {
         type: "text",
         content: `
-Here is a link to a blank style guide I've made based on my work with clients. It helps get the ball rolling in the first meeting by visualizing the possibilities of the creative direction. I also get organized, making a folder and a Pinterest board for the client.`,
+Here is a link to a blank style guide I've made based on my work with clients: https://docs.google.com/presentation/d/16oks3qcIFuduKPTuQJI1LElEfQ09EM8Nuky3Hy2djyE/edit. It helps get the ball rolling in the first meeting by visualizing the possibilities of the creative direction. I also get organized, making a folder and a Pinterest board for the client. `,
       },
       {
         type: "text",
@@ -340,9 +345,12 @@ This project was about more than building a website. It was about crafting an ex
   checkerboard3d: {
     slug: "checkerboard3d",
     title: "Checkerboard in Motion and 3D",
-    tagLine: "A 3D motion study where the default texture became the hero.",
+    tagLine: "Made another color version of this featured on CodePen",
+    tagLink: {
+      label: "here",
+      href: "https://codepen.io/hollandblumer/pen/ZYQoBVe",
+    },
     palette: { bg: "#f4f4f4ff", ink: "#131414ff" },
-
     hero: {
       type: "instagram",
       embed: "https://www.instagram.com/p/DQM3z9TDzv5/",
@@ -352,33 +360,24 @@ This project was about more than building a website. It was about crafting an ex
     sections: [
       {
         type: "text",
-        content: `**The Starting Point**  
+        content: `**Concept**  
 This began as a quick hero experiment for a private equity client with a square logo. I wanted to explore something in 3D and tested a range of square-based motions as potential directions.`,
       },
       {
         type: "text",
-        content: `**Letting the System Lead**  
+        content: `**Exploration**  
 I originally planned to color each block individually, and even explored variations inspired by the logo itself. But the default checkered texture that came with Three.js held the composition together better than anything I designed on top of it, so I kept it.`,
       },
       {
         type: "text",
-        content: `**Refining the Motion**  
-From there, I played with the timing and speed of the grid, added depth, and adjusted the lighting so the movement felt slower and more intentional. I chose a warm, fall-inspired palette for my personal version and paired it with a St. Germain track. The grid started to feel like it was moving with the music.`,
+        content: `**Refinement**  
+From there, I adjusted timing, speed, depth, and lighting so the motion felt slower and more intentional. I chose a warm, fall-inspired palette for my personal version and paired it with a St. Germain track so the grid felt like it moved with the music`,
       },
       {
         type: "video",
         src: "https://assets.codepen.io/9259849/5cc44ca4-52f5-4d90-98a1-0d993bc4b837.mp4",
         caption: "Final animation of the 3D checkerboard.",
         loop: true,
-      },
-      {
-        type: "text",
-        content: `**Further Exploration**  
-Another color variation of this piece was shared on CodePen and later featured.`,
-      },
-      {
-        type: "link",
-        href: "https://codepen.io/hollandblumer/pen/ZYQoBVe",
       },
     ],
   },
@@ -387,7 +386,11 @@ Another color variation of this piece was shared on CodePen and later featured.`
     slug: "ccnycposter",
     title: "Creative Coding NYC Poster",
     tagLine:
-      "A generative poster where the event information pulses through a grid of animated typography.",
+      "Animated typography where each letter emerges from smaller copies of itself, moving in waves with a soft glow. You can view the event",
+    tagLink: {
+      label: "here",
+      href: "https://partiful.com/e/zaMIwOD0uSo4zEXIKgkn",
+    },
     palette: { bg: "#f4f4f4ff", ink: "#131414ff" }, // Placeholder for dark background with glowing text
     hero: {
       video: "https://hollandblumer.github.io/portfolio_videos/cc.mp4", // This is based on the Work.jsx data
@@ -395,18 +398,22 @@ Another color variation of this piece was shared on CodePen and later featured.`
     },
     sections: [
       {
-        type: "text",
-        content: `During a CCNYC weekly meetup, I volunteered to make the poster for the next event and pulled in a sine-wave typography experiment I had submitted to an OpenProcessing open call. In that sketch, I drew the word to an offscreen canvas, let each tile measure how far it was from the nearest letter pixel, and used that distance to offset a cosine wave so the blocks flip in a ripple that forms and moves through the word.`,
-      },
-      {
-        type: "text",
-        content: `For the CCNYC poster, I applied the same idea but replaced those blocks with the letters themselves. I generated a mask of the event text, built a grid of cells that each found the nearest character and the distance to the edge of its shape, then made each cell display the letter it was closest to instead of a block. The letters flip and shrink using the same distance-based timing, and a second blurred mask becomes a glowing halo that lets the important details pulse. The result is a poster where the information doesn’t just exist on the page, but comes alive with motion.`,
-      },
-      {
         type: "video",
         src: "https://hollandblumer.github.io/portfolio_videos/cc.mp4",
-        caption: "The final Creative Coding NYC animated poster.",
+        caption: "Creative Coding NYC animated poster.",
         loop: true,
+      },
+      {
+        type: "text",
+        content: `Enjoyed making this poster for Creative Coding NYC. Lately, I’ve been exploring how timing and motion can make shapes appear through perception.`,
+      },
+      {
+        type: "text",
+        content: `Here, each letter is built from smaller copies of itself that move in a wave pattern, with an outward glow effect. The motion helps the event details come through without needing to sit perfectly still.`,
+      },
+      {
+        type: "text",
+        content: `Excited to keep pushing this concept and share it with the CCNYC community.`,
       },
     ],
   },
@@ -415,7 +422,11 @@ Another color variation of this piece was shared on CodePen and later featured.`
     slug: "floatinglibrary",
     title: "Floating Library for Steven Shorkey",
     tagLine:
-      "A Three.js hero concept designed for an author looking beyond traditional book websites.",
+      "A Three.js hero concept designed for an author looking beyond traditional book websites. It was also featured on CodePen",
+    tagLink: {
+      label: "here",
+      href: "https://codepen.io/hollandblumer/pen/ZYQoBVe",
+    },
     palette: { bg: "#e4eeefff", ink: "#101010ff" },
     hero: {
       video:
@@ -432,57 +443,40 @@ Another color variation of this piece was shared on CodePen and later featured.`
       },
       {
         type: "text",
-        content: `Steven Shorkey, an author and writer, came to me after seeing Meredith Norvell’s website. He was drawn to the way her site used motion and interaction to feel expressive without being overwhelming, and he wanted that same sense of intention for his own author website.
-
-From the start, Steven was clear that he didn’t want something conventional. He’s outdoorsy, drawn to greens and blues, but also deeply interested in new technology and what’s next. His goal was an author site that felt current and forward-thinking, not static or overly bookish.`,
+        content: `**Concept**  
+Steven Shorkey, an author and writer, came to me after seeing Meredith Norvell’s website. He was drawn to the motion and custom details and wanted that same sense of intention for his own site. He was clear from the start that he didn’t want something conventional. He’s outdoorsy, drawn to greens and blues, and deeply interested in new technology. The goal was an author website that felt current and forward-thinking.
+That direction was clear immediately. I wanted the hero to feel dimensional, setting the tone for the rest of the site. It was also an opportunity to explore Three.js in a way that felt purposeful rather than purely visual. I started with the idea of a library, explored multiple directions, from 2D books forming an S to words falling in Matter.js, before landing on this floating library approach.`,
       },
       {
         type: "text",
-        content: `That combination shaped the direction immediately. I wanted to build a hero that leaned into atmosphere and dimension, something that would set the tone the moment you landed on the site. I also wanted an excuse to explore Three.js in a way that felt purposeful and grounded in real use, not just visual experimentation.
-
-I started with the idea of a library, then stripped it back to its essence. Instead of shelves or a literal room, I designed a floating collection of books suspended in space.`,
+        content: `**Execution**  
+The books are designed to drift slowly and close together, rotating just enough to create depth. The palette leans into cool greens and blues to reflect Steven’s interest in the outdoors, while simple lighting keeps the scene natural. I added text that shifts in color as books overlap, reinforcing depth and interaction.`,
       },
       {
         type: "text",
-        content: `Each book drifts slowly, rotating just enough to create a sense of depth and movement. The animation is calm and continuous, designed to feel more like presence than performance. I treated the scene like a physical installation, focusing on spacing, balance, and restraint.
-
-Lighting and environment did much of the work. I used soft fog to add depth and separation, allowing the books to fade gently in and out of space, and kept the lighting simple so the scene felt natural rather than theatrical. The palette leaned into cool greens and blues to align with Steven’s taste and outdoorsy sensibility.`,
-      },
-      {
-        type: "text",
-        content: `This project was also about pushing myself technically. I wanted to work in Three.js in a way that felt intentional and viable for an author website. Every decision, from camera framing to motion speed, was made with the idea that this could live as a real hero moment, not just a standalone experiment.
-
-The Floating Library became a way to explore how 3D can bring atmosphere and dimension to an author’s online presence without distracting from the writing itself.`,
-      },
-      {
-        type: "text",
-        content: `After sharing the project on CodePen, it was featured and received over 100 likes, reinforcing that there’s an appetite for subtle, spatial interactions on the web.
-
-Ultimately, this piece represents a shift in how I think about author websites and hero sections, and how Three.js can be used thoughtfully to create modern, expressive digital spaces.`,
+        content: `**Outcome**  
+This project focused on using Three.js in a way that could realistically live on an author website. Every decision, from camera framing to motion speed, supported that goal. The site has not yet launched, as Steven is currently finalizing the written content he plans to publish. After sharing the project on CodePen, it was featured and received over 100 likes, reinforcing interest in subtle, spatial interactions on the web.`,
       },
     ],
   },
   uvsense: {
     slug: "uvsense",
-    title: "UV Sense",
+    title: "Antenna Design for the World's Smallest UV Sensor",
     tagLine:
       "Building a microscopic wearable that monitors UV exposure and syncs to smartphones.",
-    palette: { bg: "#f4f4f4ff", ink: "#131414ff" },
-    hero: {
-      video: null,
-      alt: "UV Sense lab work and device build",
+    tagLink: {
+      label: "Read Article",
+      href: "https://news.northwestern.edu/stories/2018/december/worlds-smallest-wearable-device-warns-of-uv-exposure-enables-precision-phototherapy",
     },
+    palette: { bg: "#f4f4f4ff", ink: "#131414ff" },
+
     sections: [
       {
         type: "image",
-        src: "./images/uv-sense-project.png",
+        src: "https://assets.codepen.io/9259849/uv%20sense.png",
         alt: "UV Sense lab and device assembly",
         caption:
           "Built on a tight deadline, we produced 300 UV-monitoring wearables for L’Oréal and I contributed across PCB design, assembly, and firmware, plus an antenna redesign to shrink the device further.", // :contentReference[oaicite:0]{index=0}
-      },
-      {
-        type: "link",
-        href: "https://news.northwestern.edu/stories/2018/december/worlds-smallest-wearable-device-warns-of-uv-exposure-enables-precision-phototherapy",
       },
     ],
   },
@@ -560,7 +554,6 @@ The retest rate was determined by the proportion of chargers flagged for rework 
 Cycle time was computed by measuring the time difference between the first recorded inspection of the day and the last, divided by the number of chargers processed. The system also estimated units per hour using timestamp data from inspection logs, calculating the rate at which chargers were passing through quality control.`,
       },
 
-      // Impact + NDA note + get in touch
       {
         type: "text",
         content: `**Impact**
@@ -568,18 +561,13 @@ This project merged hardware, software, and cloud technologies, improving produc
 
 Due to NDA, I can discuss technical details upon request.`,
       },
-
-      {
-        type: "text",
-        content: "**Get in touch**",
-      },
     ],
   },
   larq: {
     slug: "larq",
     title: "Filter Lifespan Detection & Sensor Prototyping for LARQ",
     tagLine:
-      "Designing and validating a capacitance-based system to track water filter lifespan in real-world conditions.",
+      "Designing and validating a capacitance-based system to track water filter lifespan.",
     palette: { bg: "#FFFFFF", ink: "#111314" },
     hero: {
       video: null,
@@ -588,32 +576,25 @@ Due to NDA, I can discuss technical details upon request.`,
     sections: [
       {
         type: "text",
-        content: `I worked with the LARQ team during the summer, where I spent time experimenting with early prototypes and thinking through how filter lifespan could actually be measured in the real world. Before joining remotely, I had worked in person with the team, which gave me context around how the product was used outside of ideal lab conditions.
-
-I proposed an experiment based on a simple observation. Most consumers don’t replace filters on a clean schedule, and real usage introduces a lot of noise. With my supervisor, I designed tests to better understand how water level behavior and filter performance changed over time. I even went to Target to source consumer filters and ran parallel experiments, one of which later informed work that was acquired by Brita.`,
-      },
-
-      {
-        type: "text",
-        content: `Problem
+        content: `**Problem**
 LARQ needed a reliable way to track water filter lifespan and prompt users to reorder at the right time. The challenge was that capacitance sensor data is noisy and highly sensitive to physical factors like flow rate, vessel geometry, and how users pour water. The system needed to work consistently across these variables, not just under ideal conditions.`,
       },
 
       {
         type: "text",
-        content: `Solution
+        content: `**Solution**
 I was sent a physical prototype and assembled a multi-sensor setup using capacitance sensors placed at different heights. I designed experiments where I controlled drain rate and observed how sensor signals changed as water levels dropped. This helped me understand which signals were stable, where false positives occurred, and how detection thresholds needed to be tuned.`,
       },
 
       {
         type: "text",
-        content: `Experimental Setup
+        content: `**Experimental Setup**
 To simulate different real-world behaviors, I partially covered the drain hole to control flow rate. I ran tests at multiple drain speeds, from fast to very slow, and recorded readings from the top, middle, and bottom sensors. I focused primarily on the middle sensor as a reference point and compared how signals shifted across repeated drain cycles.`,
       },
 
       {
         type: "text",
-        content: `Analysis & Algorithm Development
+        content: `**Analysis & Algorithm Development**
 As drain rates slowed, the sensor signals became more spread out and less predictable. Faster drains produced tighter, more consistent peaks. In some cases, the bottom sensor registered changes faster than the top sensor due to the internal geometry of the pitcher and the charcoal filter material.
 
 Using Python and Excel, I analyzed these patterns, identified outliers, and refined detection thresholds so the algorithm could reliably infer filter usage over time. This work directly informed the logic used to track filter lifespan and trigger reorder reminders.`,
@@ -621,7 +602,7 @@ Using Python and Excel, I analyzed these patterns, identified outliers, and refi
 
       {
         type: "text",
-        content: `Edge Cases & Failure Modes
+        content: `**Edge Cases & Failure Modes**
 I uncovered several failure cases during testing. Pouring water out too quickly could spike the signal and falsely trigger events. Hardware issues, like a broken sensor wire, made it clear where redundancy and better validation checks were needed.
 
 These edge cases shaped how conservative the final detection logic needed to be and helped prevent false alerts in the user-facing app.`,
@@ -629,63 +610,64 @@ These edge cases shaped how conservative the final detection logic needed to be 
 
       {
         type: "image",
-        src: "https://cdn.dribbble.com/userupload/placeholder-larq-data.png",
+        src: "https://assets.codepen.io/9259849/Screenshot%202026-01-20%20at%202.11.11%E2%80%AFPM.png",
         alt: "Capacitance sensor drain rate experiment data",
-        caption:
-          "Drain rate experiments used to analyze capacitance sensor behavior and refine filter lifespan detection logic. :contentReference[oaicite:1]{index=1}",
+        caption: "Early Pitcher Prototype",
       },
 
       {
         type: "image",
-        src: "https://cdn.dribbble.com/userupload/placeholder-larq-team.png",
+        src: "https://assets.codepen.io/9259849/Screenshot%202026-01-19%20at%2012.22.50%E2%80%AFPM.png",
         alt: "LARQ team",
-        caption:
-          "End-of-summer wrap-up with the LARQ team after hands-on prototyping and experimentation.",
+        caption: "End-of-summer wrap-up with the LARQ team in 2019",
       },
 
       {
         type: "text",
-        content: `Impact
+        content: `**Impact**
 This work directly contributed to an algorithm that tracks filter lifespan and prompts users to reorder at the right time. The logic was integrated into the LARQ mobile app, helping translate noisy physical sensor data into a reliable, consumer-facing feature.`,
-      },
-
-      {
-        type: "text",
-        content: "Get in touch",
       },
     ],
   },
   abstractolives: {
     slug: "abstractolives",
-    title: "Design with a splash of code",
-    tagLine: "Design-led motion with a touch of code.",
+    title: "Design with a Splash of Code",
+    tagLine:
+      "Featured on the p5.js Instagram Stories, CodePen, and in a LinkedIn article by Álvaro Montoro",
+    tagLink: {
+      label: "here",
+      href: "https://www.linkedin.com/pulse/10-cool-codepen-demos-december-2025-%C3%A1lvaro-montoro-taude/?trackingId=4YyH6XVWtUS6nx2e7boODw%3D%3D",
+    },
     palette: { bg: "#f4f4f4ff", ink: "#131414ff" },
     hero: {
       type: "instagram",
       embed: "https://www.instagram.com/p/DRydoI9jWon/",
       alt: "Abstract Olives Instagram post",
     },
-
     sections: [
       {
         type: "text",
-        content: `This generative art project started as an exploration of circles within circles. While playing with the forms, I landed on a color palette that felt reminiscent of olives, which became the visual anchor for the piece. From there, I introduced subtle motion using p5.js to bring variation and life to the composition. I was also inspired by the works of Okazz and Andor Saga on OpenProcessing.`,
+        content: `**Concept**  
+This generative art project began as an exploration of circles within circles. While playing with the forms, I landed on a color palette that felt reminiscent of olives, which became the visual anchor for the piece.
+From there, the idea shifted toward creating a calm, design-led composition. I was inspired by Okazz and Andor Saga on OpenProcessing, especially their use of centrally clustered forms.`,
       },
       {
         type: "text",
-        content: `The piece was later picked by CodePen and shared in a LinkedIn article reflecting on the intersection of visual design and creative coding.`,
+        content: `**Execution**  
+I introduced subtle motion using p5.js to bring variation and life into the composition, keeping the movement slow and controlled so the shapes and color relationships stayed front and center.`,
       },
       {
-        type: "linkedin",
-        url: "https://www.linkedin.com/pulse/10-cool-codepen-demos-december-2025-%C3%A1lvaro-montoro-taude/",
+        type: "text",
+        content: `**Outcome**  
+The project was featured on the official p5.js Instagram account through their Instagram stories and was later selected by CodePen and shared in a LinkedIn article reflecting on the intersection of visual design and creative coding.`,
       },
     ],
   },
   "3dslicescountdown": {
     slug: "3dslicescountdown",
-    title: "Checkerboard in Motion and 3D",
+    title: "3D Slices Countdown with Three.js",
     tagLine:
-      "A 3D countdown revealed through sliced ribbons and subtle contour glow.",
+      "A 3D countdown revealed through sliced ribbons and a subtle contour line",
     palette: { bg: "#f4f3ef", ink: "#131414ff" },
     hero: {
       type: "instagram",
@@ -696,17 +678,20 @@ This work directly contributed to an algorithm that tracks filter lifespan and p
     sections: [
       {
         type: "text",
-        content: `This project started from a photo posted by Kelly Wearstler. I was drawn to the way the surface feels carved and rhythmic, like soft folds or woven ribbons. I wanted to translate that same energy into motion typography, but in 3D.
-The piece is built with Three.js. The number is not a single mesh. It is formed by a stack of thin vertical ribbons. Each ribbon samples a blurred digit field and pushes forward by row, so the face of the number emerges as a sculpted relief. The movement snaps into place slowly, with a stagger across ribbons so it feels alive instead of mechanical. I originally planned to add more explicit contour lines, almost like topographic bands running through the form. In the end I kept it quieter. The subtle contour halo around the edge gave the number enough definition while letting the surface and depth do the talking`,
+        content: ` **Inspiration**
+        This project started from a photo posted by Kelly Wearstler. I was drawn to the way the surface feels carved and rhythmic, like soft folds or woven ribbons. I wanted to translate that same energy into motion typography, but in 3D.
+`,
       },
-
+      {
+        type: "image",
+        src: "https://assets.codepen.io/9259849/1DB0E0DF-C076-486C-BF09-55FBB19D6B08_1_105_c.jpeg",
+        alt: "Photo posted by Kelly Wearstler",
+        caption: "Photo Posted by Kelly Wearstler that inspired this project",
+      },
       {
         type: "text",
-        content: "View the piece:",
-      },
-      {
-        type: "link",
-        href: "https://www.instagram.com/p/DS8IsIOESqk/",
+        content: `**Execution**
+The piece is built with Three.js. The number is not a single mesh. It is formed by a stack of thin vertical ribbons. Each ribbon samples a blurred digit field and pushes forward by row, so the face of the number emerges as a sculpted relief. The movement snaps into place slowly, with a stagger across ribbons so it feels alive instead of mechanical. I originally planned to add more explicit contour lines, almost like topographic bands running through the form. In the end I kept it quieter. The subtle contour halo around the edge gave the number enough definition while letting the surface and depth do the talking`,
       },
     ],
   },
