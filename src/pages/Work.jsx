@@ -10,13 +10,13 @@ import VideoStretch from "../components/VideoStretch.jsx";
 import VideoStretchErrorBoundary from "../components/VideoStretchErrorBoundary.jsx";
 import VideoLiquidErrorBoundary from "../components/VideoLiquidErrorBoundary.jsx";
 import VideoStretch2 from "../components/VideoStretch2.jsx";
-// src/pages/Work.jsx
+
 export const projects = [
   {
     id: 1,
     slug: "checkerboard3d",
     categories: ["featured", "creative"],
-    title: "Checkerboard in Motion and 3D",
+    title: "Checkerboard in Motion and 3D with Three.js",
     description: "Thrilled to see it featured by CodePen ",
     type: "video",
     videoSrc:
@@ -24,6 +24,7 @@ export const projects = [
     posterSrc: new URL("../assets/images/checkerboard3d.jpeg", import.meta.url)
       .href,
   },
+
   {
     id: 2,
     slug: "katherinegroverfinejewelry",
@@ -38,28 +39,55 @@ export const projects = [
   },
   {
     id: 3,
-    slug: "ccnycposter",
-    categories: ["featured", "creative"],
-    title: "Creative Coding NYC Poster",
+    slug: "floatinglibrary",
+    categories: ["featured", "for clients"],
+    title: "Floating Three.js Library for Steven Shorkey",
     description:
-      "Exploring how timing and motion can make shapes appear through perception",
+      "A Three.js hero concept designed for an author looking beyond traditional book websites.",
     type: "video",
-    videoSrc: "https://hollandblumer.github.io/portfolio_videos/cc.mp4",
-    posterSrc: new URL("../assets/images/ccnyc.PNG", import.meta.url).href,
+    videoSrc:
+      "https://hollandblumer.github.io/portfolio_videos/floatinglibrary.mp4",
+    posterSrc: new URL("../assets/images/floatinglibrary.png", import.meta.url)
+      .href,
   },
+
   {
     id: 4,
-    slug: "cherylfudge",
-    categories: ["featured", "for clients"],
-    title: "Cherylfudge.com",
-    description:
-      "A website design that compliments Cheryl Fudge's modern, dynamic art with a nod to Nantucket.",
+    slug: "abstractolives",
+    categories: ["featured", "creative"],
+    title: "Design with a Splash of Code Using p5.js",
+    description: "Thrilled to see it featured by CodePen ",
     type: "video",
-    videoSrc: "https://hollandblumer.github.io/portfolio_videos/cfudge.mp4",
-    posterSrc: new URL("../assets/images/cheryl.png", import.meta.url).href,
+    videoSrc:
+      "https://hollandblumer.github.io/portfolio_videos/abstract-olives.mp4",
+    posterSrc: new URL("../assets/images/abstractolives.jpeg", import.meta.url)
+      .href,
   },
+
   {
     id: 5,
+    slug: "chargepoint",
+    categories: ["featured", "research"],
+    title: "Automated Quality Assurance System for ChargePoint",
+    description: "Microscopic UV-monitoring wearable",
+    type: "image",
+    imageSrc: new URL("../assets/images/chargepoint.png", import.meta.url).href,
+  },
+  {
+    id: 6,
+    slug: "meredithnorvell",
+    categories: ["featured", "for clients"],
+    title: "Wordpress Website for Meredith Norvell",
+    description:
+      "Designed and built with interactive book elements that steal the show",
+    type: "video",
+    videoSrc:
+      "https://hollandblumer.github.io/portfolio_videos/meredithnorvell.mp4",
+    posterSrc: new URL("../assets/images/meredith.png", import.meta.url).href,
+  },
+
+  {
+    id: 7,
     slug: "americanseasons",
     categories: ["featured", "for clients"],
     title: "Buzz-Worthy Animation for American Seasons",
@@ -69,32 +97,58 @@ export const projects = [
     posterSrc: new URL("../assets/images/seasons.png", import.meta.url).href,
   },
   {
-    id: 6,
-    slug: "meredithnorvell",
-    categories: ["featured", "for clients"],
-    title: "Website for Meredith Norvell",
+    id: 8,
+    slug: "larq",
+    categories: ["featured", "research"],
+    title: "Filter Sensor Experiments for the LARQ PureVis Pitcher",
     description:
-      "Designed and built with interactive book elements that steal the show",
+      "Designing and validating a capacitance-based system to track filter lifespan.",
+    type: "image",
+    imageSrc: new URL("../assets/images/larq.png", import.meta.url).href,
+  },
+  {
+    id: 9,
+    slug: "3dslicescountdown",
+    categories: ["featured", "creative"],
+    title: "3D Slices Countdown",
+    description:
+      "A 3D countdown built from vertical ribbons that extrude forward to reveal each digit. Each ribbon samples a blurred digit field and offsets its geometry by row, creating a soft carved edge. I originally wanted to add stronger contour-line bands, but ended up keeping a subtle halo-like contour around the number for a calmer, more sculptural read.",
     type: "video",
     videoSrc:
-      "https://hollandblumer.github.io/portfolio_videos/meredithnorvell.mp4",
-    posterSrc: new URL("../assets/images/meredith.png", import.meta.url).href,
+      "https://hollandblumer.github.io/portfolio_videos/3dslicescountdown.mp4",
+    posterSrc: new URL(
+      "../assets/images/3dslicescountdown.png",
+      import.meta.url,
+    ).href,
   },
+
   {
-    id: 7,
-    slug: "aj",
+    id: 10,
+    slug: "cherylfudge",
     categories: ["featured", "for clients"],
-    title: "Website for AJ",
-    description: "Short film exploring movement and tension in oil and light",
+    title: "Cherylfudge.com",
+    description:
+      "A website design that compliments Cheryl Fudge's modern, dynamic art with a nod to Nantucket.",
     type: "video",
-    videoSrc: "https://hollandblumer.github.io/portfolio_videos/aj.mp4",
-    posterSrc: new URL("../assets/images/aj.png", import.meta.url).href,
+    videoSrc: "https://hollandblumer.github.io/portfolio_videos/cfudge.mp4",
+    posterSrc: new URL("../assets/images/cheryl.png", import.meta.url).href,
+  },
+
+  {
+    id: 11,
+    slug: "uvsense",
+    categories: ["featured", "research"],
+    title: "Antenna Design for the World’s Smallest UV Sensor",
+    description:
+      "Designed and validated a functional antenna for an ultra-compact wearable UV sensor, balancing size constraints with signal reliability.",
+    type: "image",
+    imageSrc: new URL("../assets/images/uv-sense.png", import.meta.url).href,
   },
   {
-    id: 8,
+    id: 12,
     slug: "madewithlove",
     categories: ["featured", "for clients"],
-    title: "Made With Love",
+    title: "Made With Love and p5.js",
     description:
       "When it comes together like this, it’s Valentine’s Day post-worthy",
     type: "video",
@@ -104,14 +158,36 @@ export const projects = [
       .href,
   },
   {
-    id: 9,
+    id: 13,
     slug: "partana",
     categories: ["featured", "creative"],
-    title: "Smear Effect",
+    title: "Smear Effect for Templates",
     description: "First Template",
     type: "video",
     videoSrc: "https://hollandblumer.github.io/portfolio_videos/partana.mp4",
     posterSrc: new URL("../assets/images/partana.png", import.meta.url).href,
+  },
+
+  {
+    id: 14,
+    slug: "aj",
+    categories: ["featured", "for clients"],
+    title: "Matter.js Animation for AJ Integrated",
+    description: "Short film exploring movement and tension in oil and light",
+    type: "video",
+    videoSrc: "https://hollandblumer.github.io/portfolio_videos/aj.mp4",
+    posterSrc: new URL("../assets/images/aj.png", import.meta.url).href,
+  },
+  {
+    id: 15,
+    slug: "ccnycposter",
+    categories: ["featured", "creative"],
+    title: "Creative Coding NYC Poster",
+    description:
+      "Exploring how timing and motion can make shapes appear through perception",
+    type: "video",
+    videoSrc: "https://hollandblumer.github.io/portfolio_videos/ccnyc2.mp4",
+    posterSrc: new URL("../assets/images/ccnyc.PNG", import.meta.url).href,
   },
 ];
 
@@ -141,7 +217,7 @@ export default function Work() {
   }, [isLoading]);
 
   const visibleProjects = projects.filter((project) =>
-    activeFilter === "all" ? true : project.categories.includes(activeFilter)
+    activeFilter === "all" ? true : project.categories.includes(activeFilter),
   );
 
   return (
@@ -249,7 +325,7 @@ export default function Work() {
           <div style={{ width: "100%", maxWidth: 1000, margin: "0 auto" }} />
 
           <div className="filter-menu">
-            {["featured", "for clients", "creative"].map((cat) => (
+            {["featured", "for clients", "research", "creative"].map((cat) => (
               <button
                 key={cat}
                 className={`filter-button ${
@@ -271,21 +347,29 @@ export default function Work() {
                 ? "/templates"
                 : `/work/${project.slug}`;
 
-            return project.type === "video" ? (
+            return (
               <Link
                 key={project.id}
                 to={targetLink}
                 className="project-card-link"
               >
-                <VideoStretch2
-                  videoSrc={project.videoSrc}
-                  title={project.title}
-                  posterSrc={project.posterSrc}
-                >
-                  <p className="project-desc">{project.description}</p>
-                </VideoStretch2>
+                <div className="media-frame">
+                  {project.type === "video" ? (
+                    <video
+                      src={project.videoSrc}
+                      poster={project.posterSrc}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                    />
+                  ) : (
+                    <img src={project.imageSrc} alt={project.title} />
+                  )}
+                </div>
+                <h3 className="project-title">{project.title}</h3>
               </Link>
-            ) : null;
+            );
           })}
         </div>
       </main>

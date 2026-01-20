@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -456,7 +456,7 @@
 
       function preload() {
         letterFont = loadFont(
-          "https://assets.codepen.io/9259849/RubikMonoOne-Regular_1.ttf"
+          "https://assets.codepen.io/9259849/RubikMonoOne-Regular_1.ttf",
         );
       }
 
@@ -489,7 +489,7 @@
         hashGrid = new HashGrid(
           width,
           height,
-          Math.floor(effectiveVertexDistance * 2)
+          Math.floor(effectiveVertexDistance * 2),
         );
         particles = [];
         distanceJoints = [];
@@ -561,7 +561,7 @@
               cy,
               radius,
               info.char,
-              letterIndex
+              letterIndex,
             );
 
             // readable-first target
@@ -599,7 +599,7 @@
             const p = particles[i];
             const v = geometry.limit(
               { x: p.vx, y: p.vy },
-              (effectiveVertexDistance / sdt) * 1.0
+              (effectiveVertexDistance / sdt) * 1.0,
             );
             p.vx = v.x;
             p.vy = v.y;
@@ -689,7 +689,7 @@
 
               p.move(
                 (targetX - p.x) * anchorK * aw * sdt,
-                (targetY - p.y) * anchorK * aw * sdt
+                (targetY - p.y) * anchorK * aw * sdt,
               );
 
               const dxCenter = p.x - cx;
@@ -706,7 +706,7 @@
               const off = Math.hypot(p.x - targetX, p.y - targetY);
               const idealR = Math.max(
                 1,
-                Math.hypot(p.restDX * s, p.restDY * s)
+                Math.hypot(p.restDX * s, p.restDY * s),
               );
               squishSum += off / idealR;
               squishCount++;
@@ -820,7 +820,7 @@
                 friction: 0.1,
                 radius: PARTICLE_COLLISION_RADIUS,
                 mass: 1,
-              })
+              }),
             );
           } else {
             const last = currentLoop[currentLoop.length - 1];
@@ -834,7 +834,7 @@
                   friction: 0.1,
                   radius: PARTICLE_COLLISION_RADIUS,
                   mass: 1,
-                })
+                }),
               );
             }
           }
@@ -869,7 +869,7 @@
                 v,
                 v.nextSibling,
                 d1 * 1.02,
-                0.75
+                0.75,
               );
 
               const d2 = dist(v.x, v.y, v2.x, v2.y);
@@ -886,7 +886,7 @@
         const baseArea = processedLoops.reduce(
           (sum, currentLoop) =>
             sum + Math.abs(geometry.polygonArea(currentLoop)),
-          0
+          0,
         );
         const area = baseArea * random(1.02, 1.08);
 

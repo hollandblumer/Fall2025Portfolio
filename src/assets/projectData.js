@@ -339,32 +339,42 @@ This project was about more than building a website. It was about crafting an ex
   },
   checkerboard3d: {
     slug: "checkerboard3d",
-    title: "CheckerBoard in Motion and 3D",
-    tagLine: "",
-    palette: { bg: "#f4f4f4ff", ink: "#131414ff" }, // Based on warm fall palette
+    title: "Checkerboard in Motion and 3D",
+    tagLine: "A 3D motion study where the default texture became the hero.",
+    palette: { bg: "#f4f4f4ff", ink: "#131414ff" },
+
     hero: {
-      video:
-        "https://assets.codepen.io/9259849/5cc44ca4-52f5-4d90-98a1-0d993bc4b837.mp4",
-      alt: "3D Checkerboard animation moving to music",
+      type: "instagram",
+      embed: "https://www.instagram.com/p/DQM3z9TDzv5/",
+      alt: "3D checkerboard animation moving to music",
     },
+
     sections: [
       {
         type: "text",
-        content: `While looking for a hero idea for a client with a square-heavy logo, I created a falling blocks animation and loved its checkered default pattern that was only meant to be a placeholder for an image. I kept that look, added a delay to the movement, carried over the depth from my initial experiment, tweaked the lighting, chose a warm fall palette, and set it to St. Germain for a cozy piano house feel. It ended up looking like the grid was dancing right along with the music.`,
+        content: `**The Starting Point**  
+This began as a quick hero experiment for a private equity client with a square logo. I wanted to explore something in 3D and tested a range of square-based motions as potential directions.`,
+      },
+      {
+        type: "text",
+        content: `**Letting the System Lead**  
+I originally planned to color each block individually, and even explored variations inspired by the logo itself. But the default checkered texture that came with Three.js held the composition together better than anything I designed on top of it, so I kept it.`,
+      },
+      {
+        type: "text",
+        content: `**Refining the Motion**  
+From there, I played with the timing and speed of the grid, added depth, and adjusted the lighting so the movement felt slower and more intentional. I chose a warm, fall-inspired palette for my personal version and paired it with a St. Germain track. The grid started to feel like it was moving with the music.`,
       },
       {
         type: "video",
         src: "https://assets.codepen.io/9259849/5cc44ca4-52f5-4d90-98a1-0d993bc4b837.mp4",
-        caption: "Final animation of the 3D Checkerboard.",
+        caption: "Final animation of the 3D checkerboard.",
         loop: true,
       },
       {
         type: "text",
-        content: "Check it out:", // This sets the intro text
-      },
-      {
-        type: "link",
-        href: "https://www.instagram.com/p/DQM3z9TDzv5/",
+        content: `**Further Exploration**  
+Another color variation of this piece was shared on CodePen and later featured.`,
       },
       {
         type: "link",
@@ -372,6 +382,7 @@ This project was about more than building a website. It was about crafting an ex
       },
     ],
   },
+
   ccnycposter: {
     slug: "ccnycposter",
     title: "Creative Coding NYC Poster",
@@ -407,7 +418,8 @@ This project was about more than building a website. It was about crafting an ex
       "A Three.js hero concept designed for an author looking beyond traditional book websites.",
     palette: { bg: "#e4eeefff", ink: "#101010ff" },
     hero: {
-      video: "PASTE_FLOATING_LIBRARY_VIDEO_URL_HERE",
+      video:
+        "https://hollandblumer.github.io/portfolio_videos/floatinglibrary.mp4",
       alt: "Floating Library Three.js hero animation for Steven Shorkey",
     },
     sections: [
@@ -447,6 +459,254 @@ The Floating Library became a way to explore how 3D can bring atmosphere and dim
         content: `After sharing the project on CodePen, it was featured and received over 100 likes, reinforcing that there’s an appetite for subtle, spatial interactions on the web.
 
 Ultimately, this piece represents a shift in how I think about author websites and hero sections, and how Three.js can be used thoughtfully to create modern, expressive digital spaces.`,
+      },
+    ],
+  },
+  uvsense: {
+    slug: "uvsense",
+    title: "UV Sense",
+    tagLine:
+      "Building a microscopic wearable that monitors UV exposure and syncs to smartphones.",
+    palette: { bg: "#f4f4f4ff", ink: "#131414ff" },
+    hero: {
+      video: null,
+      alt: "UV Sense lab work and device build",
+    },
+    sections: [
+      {
+        type: "image",
+        src: "./images/uv-sense-project.png",
+        alt: "UV Sense lab and device assembly",
+        caption:
+          "Built on a tight deadline, we produced 300 UV-monitoring wearables for L’Oréal and I contributed across PCB design, assembly, and firmware, plus an antenna redesign to shrink the device further.", // :contentReference[oaicite:0]{index=0}
+      },
+      {
+        type: "link",
+        href: "https://news.northwestern.edu/stories/2018/december/worlds-smallest-wearable-device-warns-of-uv-exposure-enables-precision-phototherapy",
+      },
+    ],
+  },
+  chargepoint: {
+    slug: "chargepoint",
+    title: "Automated Quality Assurance System for ChargePoint",
+    tagLine:
+      "A React + AWS dashboard that automated defect detection and real-time QA analytics for EV charger manufacturing.",
+    palette: { bg: "#FCFCFC", ink: "#141618" },
+    hero: {
+      video: null,
+      alt: "ChargePoint quality assurance dashboard and cloud infrastructure",
+    },
+    sections: [
+      // Intro should come first
+      {
+        type: "text",
+        content: `As part of ENGG 199 - Special Topics in Engineering Sciences, I worked on a full-stack development project focused on improving manufacturing quality assurance for ChargePoint. This course provided an opportunity to apply software development, cloud infrastructure, and computer vision techniques in a real-world setting. The goal was to automate defect detection for EV chargers using a React-based dashboard and AWS services.`,
+      },
+
+      // Problem
+      {
+        type: "text",
+        content: `**Problem**
+Manufacturing high-quality EV chargers requires rigorous quality control, but the existing process relied heavily on manual inspections, leading to delays, incomplete data, and inefficiencies. ChargePoint needed an automated system to capture defect data in real time, reduce inspection time per unit, and improve traceability for defect analysis.`,
+      },
+
+      // Solution
+      {
+        type: "text",
+        content: `**Solution**
+I built a React-powered dashboard that integrates computer vision, cloud computing, and real-time analytics to monitor key production metrics, including first pass yield, retest and rework rates, final yield, cycle time, and takt time. The dashboard allows users to search and filter quality control data by serial number, factory location, and pass or fail status, providing engineers with instant access to critical insights.`,
+      },
+
+      // Images (below solution)
+      {
+        type: "image",
+        src: "https://cdn.dribbble.com/userupload/41491172/file/original-8f10aad278ebf69990949bc646b948a4.png?resize=2048x1217&vertical=center",
+        alt: "ChargePoint QA dashboard screenshot",
+        caption:
+          "Screenshot of the dashboard I developed and presented for ChargePoint. Built with React, AWS Amplify, and GraphQL to automate quality assurance and defect tracking before the rise of GenAI.",
+      },
+      {
+        type: "image",
+        src: "https://cdn.dribbble.com/userupload/41491171/file/original-c9980180dca46e3e7448f6690554d6f8.png?resize=1504x923&vertical=center",
+        alt: "Recent capture data and charger detail view",
+        caption:
+          "Recent capture data and detailed charger view from the dashboard I built for ChargePoint.",
+      },
+
+      // Cloud / backend
+      {
+        type: "text",
+        content: `**Cloud Infrastructure and Backend**
+Originally, the project was set up with MongoDB, but I transitioned to AWS Amplify and Cognito for a scalable authentication and data management system. Rather than building a traditional backend with custom server logic, I leveraged AWS’s managed services to handle authentication, database interactions, and API management. I configured AWS AppSync for efficient GraphQL querying and implemented AWS S3 for secure storage and retrieval of inspection images. This cloud-based setup ensured real-time data accessibility and automation while minimizing the need for direct backend maintenance.
+
+To automate quality checks, the system captured barcode and component images, analyzing them with SIFT and other image processing algorithms in Python. This enabled automated defect detection, reducing the need for manual inspection and improving error traceability.`,
+      },
+
+      // Error tracking
+      {
+        type: "text",
+        content: `**Error Tracking and Visualization**
+I developed an interactive dashboard that categorized and visualized manufacturing defects. Using Recharts.js, I built bar charts for error frequency analysis, helping engineers identify recurring issues. Additionally, I implemented moment.js to calculate time-based metrics such as units per hour and cycle time, providing deeper insights into production efficiency.`,
+      },
+
+      // Stats + metrics
+      {
+        type: "text",
+        content: `**Statistical Analysis and Performance Metrics**
+The dashboard calculated first pass yield as the ratio of chargers that passed inspection on the first attempt to the total number of chargers produced. This was updated in real time and displayed as a percentage.
+
+The retest rate was determined by the proportion of chargers flagged for rework after failing the initial inspection. The system also calculated final yield, which measured the percentage of chargers that ultimately passed inspection, including those that required rework.
+
+Cycle time was computed by measuring the time difference between the first recorded inspection of the day and the last, divided by the number of chargers processed. The system also estimated units per hour using timestamp data from inspection logs, calculating the rate at which chargers were passing through quality control.`,
+      },
+
+      // Impact + NDA note + get in touch
+      {
+        type: "text",
+        content: `**Impact**
+This project merged hardware, software, and cloud technologies, improving production efficiency, defect traceability, and real-time quality monitoring. By automating quality control processes, the system reduced inspection time per unit and provided engineers with actionable insights to improve manufacturing performance.
+
+Due to NDA, I can discuss technical details upon request.`,
+      },
+
+      {
+        type: "text",
+        content: "**Get in touch**",
+      },
+    ],
+  },
+  larq: {
+    slug: "larq",
+    title: "Filter Lifespan Detection & Sensor Prototyping for LARQ",
+    tagLine:
+      "Designing and validating a capacitance-based system to track water filter lifespan in real-world conditions.",
+    palette: { bg: "#FFFFFF", ink: "#111314" },
+    hero: {
+      video: null,
+      alt: "LARQ water filter prototyping and sensor experimentation",
+    },
+    sections: [
+      {
+        type: "text",
+        content: `I worked with the LARQ team during the summer, where I spent time experimenting with early prototypes and thinking through how filter lifespan could actually be measured in the real world. Before joining remotely, I had worked in person with the team, which gave me context around how the product was used outside of ideal lab conditions.
+
+I proposed an experiment based on a simple observation. Most consumers don’t replace filters on a clean schedule, and real usage introduces a lot of noise. With my supervisor, I designed tests to better understand how water level behavior and filter performance changed over time. I even went to Target to source consumer filters and ran parallel experiments, one of which later informed work that was acquired by Brita.`,
+      },
+
+      {
+        type: "text",
+        content: `Problem
+LARQ needed a reliable way to track water filter lifespan and prompt users to reorder at the right time. The challenge was that capacitance sensor data is noisy and highly sensitive to physical factors like flow rate, vessel geometry, and how users pour water. The system needed to work consistently across these variables, not just under ideal conditions.`,
+      },
+
+      {
+        type: "text",
+        content: `Solution
+I was sent a physical prototype and assembled a multi-sensor setup using capacitance sensors placed at different heights. I designed experiments where I controlled drain rate and observed how sensor signals changed as water levels dropped. This helped me understand which signals were stable, where false positives occurred, and how detection thresholds needed to be tuned.`,
+      },
+
+      {
+        type: "text",
+        content: `Experimental Setup
+To simulate different real-world behaviors, I partially covered the drain hole to control flow rate. I ran tests at multiple drain speeds, from fast to very slow, and recorded readings from the top, middle, and bottom sensors. I focused primarily on the middle sensor as a reference point and compared how signals shifted across repeated drain cycles.`,
+      },
+
+      {
+        type: "text",
+        content: `Analysis & Algorithm Development
+As drain rates slowed, the sensor signals became more spread out and less predictable. Faster drains produced tighter, more consistent peaks. In some cases, the bottom sensor registered changes faster than the top sensor due to the internal geometry of the pitcher and the charcoal filter material.
+
+Using Python and Excel, I analyzed these patterns, identified outliers, and refined detection thresholds so the algorithm could reliably infer filter usage over time. This work directly informed the logic used to track filter lifespan and trigger reorder reminders.`,
+      },
+
+      {
+        type: "text",
+        content: `Edge Cases & Failure Modes
+I uncovered several failure cases during testing. Pouring water out too quickly could spike the signal and falsely trigger events. Hardware issues, like a broken sensor wire, made it clear where redundancy and better validation checks were needed.
+
+These edge cases shaped how conservative the final detection logic needed to be and helped prevent false alerts in the user-facing app.`,
+      },
+
+      {
+        type: "image",
+        src: "https://cdn.dribbble.com/userupload/placeholder-larq-data.png",
+        alt: "Capacitance sensor drain rate experiment data",
+        caption:
+          "Drain rate experiments used to analyze capacitance sensor behavior and refine filter lifespan detection logic. :contentReference[oaicite:1]{index=1}",
+      },
+
+      {
+        type: "image",
+        src: "https://cdn.dribbble.com/userupload/placeholder-larq-team.png",
+        alt: "LARQ team",
+        caption:
+          "End-of-summer wrap-up with the LARQ team after hands-on prototyping and experimentation.",
+      },
+
+      {
+        type: "text",
+        content: `Impact
+This work directly contributed to an algorithm that tracks filter lifespan and prompts users to reorder at the right time. The logic was integrated into the LARQ mobile app, helping translate noisy physical sensor data into a reliable, consumer-facing feature.`,
+      },
+
+      {
+        type: "text",
+        content: "Get in touch",
+      },
+    ],
+  },
+  abstractolives: {
+    slug: "abstractolives",
+    title: "Design with a splash of code",
+    tagLine: "Design-led motion with a touch of code.",
+    palette: { bg: "#f4f4f4ff", ink: "#131414ff" },
+    hero: {
+      type: "instagram",
+      embed: "https://www.instagram.com/p/DRydoI9jWon/",
+      alt: "Abstract Olives Instagram post",
+    },
+
+    sections: [
+      {
+        type: "text",
+        content: `This generative art project started as an exploration of circles within circles. While playing with the forms, I landed on a color palette that felt reminiscent of olives, which became the visual anchor for the piece. From there, I introduced subtle motion using p5.js to bring variation and life to the composition. I was also inspired by the works of Okazz and Andor Saga on OpenProcessing.`,
+      },
+      {
+        type: "text",
+        content: `The piece was later picked by CodePen and shared in a LinkedIn article reflecting on the intersection of visual design and creative coding.`,
+      },
+      {
+        type: "linkedin",
+        url: "https://www.linkedin.com/pulse/10-cool-codepen-demos-december-2025-%C3%A1lvaro-montoro-taude/",
+      },
+    ],
+  },
+  "3dslicescountdown": {
+    slug: "3dslicescountdown",
+    title: "Checkerboard in Motion and 3D",
+    tagLine:
+      "A 3D countdown revealed through sliced ribbons and subtle contour glow.",
+    palette: { bg: "#f4f3ef", ink: "#131414ff" },
+    hero: {
+      type: "instagram",
+      embed: "https://www.instagram.com/p/DS8IsIOESqk/",
+      alt: "3D Slices Countdown Instagram post",
+    },
+
+    sections: [
+      {
+        type: "text",
+        content: `This project started from a photo posted by Kelly Wearstler. I was drawn to the way the surface feels carved and rhythmic, like soft folds or woven ribbons. I wanted to translate that same energy into motion typography, but in 3D.
+The piece is built with Three.js. The number is not a single mesh. It is formed by a stack of thin vertical ribbons. Each ribbon samples a blurred digit field and pushes forward by row, so the face of the number emerges as a sculpted relief. The movement snaps into place slowly, with a stagger across ribbons so it feels alive instead of mechanical. I originally planned to add more explicit contour lines, almost like topographic bands running through the form. In the end I kept it quieter. The subtle contour halo around the edge gave the number enough definition while letting the surface and depth do the talking`,
+      },
+
+      {
+        type: "text",
+        content: "View the piece:",
+      },
+      {
+        type: "link",
+        href: "https://www.instagram.com/p/DS8IsIOESqk/",
       },
     ],
   },

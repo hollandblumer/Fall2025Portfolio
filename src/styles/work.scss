@@ -1,6 +1,5 @@
 .projects-section {
   padding: 80px 40px;
-
   margin: 0 auto;
 }
 
@@ -43,6 +42,10 @@
   text-decoration: underline;
 }
 
+/* =========================
+   GRID
+   ========================= */
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -62,11 +65,81 @@
   }
 }
 
+/* =========================
+   CARD LINK
+   ========================= */
+
+.project-card-link {
+  color: inherit;
+  text-decoration: none;
+  display: flex; /* was block */
+  flex-direction: column;
+  align-items: center; /* centers the media frame */
+  gap: 12px; /* space between media + text */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.project-card-link:hover,
+.project-card-link:focus {
+  color: inherit;
+  text-decoration: none;
+}
+.project-title {
+  margin: 4px 0 0;
+  width: 100%;
+  max-width: 320px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  text-align: center;
+}
+
+.project-desc {
+  margin: 0;
+  width: 100%;
+  max-width: 320px; /* controls wrapping so it doesn’t look weird */
+  font-size: 14px;
+  line-height: 1.4;
+  color: #888888;
+  text-align: center;
+}
+
+/* =========================
+   ✅ NEW: ONE shared media frame for BOTH videos + images
+   Make sure your JSX uses:
+   <div className="media-frame">
+     <video .../> OR <img .../>
+   </div>
+   ========================= */
+
+.media-frame {
+  width: 100%;
+  aspect-ratio: 3 / 4; /* change to 1 / 1 if you want squares */
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+/* Make BOTH video + image behave identically inside the frame */
+.media-frame video,
+.media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none;
+}
+
+/* =========================
+   ❌ Legacy rules (neutralized)
+   These were causing inconsistent sizing.
+   Leaving them here but making them harmless.
+   ========================= */
+
 .project img {
   width: 100%;
   display: block;
-  margin-bottom: 12px;
-  height: 450px;
+  margin-bottom: 0;
+  height: auto; /* was 450px */
 }
 
 .project h3 {
@@ -84,20 +157,17 @@
 
 .project-frame {
   position: relative;
-  /* Use padding-bottom trick for aspect ratio (e.g., 1:1 for 100%) */
-  padding-bottom: 100%;
-  height: 0;
-  overflow: hidden;
+  padding-bottom: 0; /* was 100% */
+  height: auto;
+  overflow: visible;
 }
 
 .project-frame img,
 .project-frame iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: static;
   width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensures image/video covers the container */
+  height: auto;
+  object-fit: cover;
 }
 
 .work-nav {
@@ -111,9 +181,9 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-
   padding: 0 40px;
 }
+
 .work-desktop-social-icons {
   width: 80px;
   height: 40px;
@@ -126,13 +196,13 @@
 }
 
 .work-desktop-social-icons a {
-  color: inherit; /* uses the parent color #a5a5a5 */
-  text-decoration: none; /* removes underline */
+  color: inherit;
+  text-decoration: none;
 }
 
 .work-desktop-social-icons a:hover,
 .work-desktop-social-icons a:focus {
-  color: inherit; /* prevents hover from changing color */
+  color: inherit;
 }
 
 .work-menu-wrapper {
@@ -140,14 +210,22 @@
   height: 100px;
   z-index: 2000;
 }
-/* Optional: Adjust for smaller screens if needed */
+
 @media (max-width: 768px) {
   .work-desktop-social-icons {
     display: none;
   }
 }
 
-/* ============= PROJECT GRID WRAPPER ============= */
+.work-frame {
+  border: none;
+  outline: none;
+}
+
+/* =========================
+   LEGACY: PROJECT GRID WRAPPER
+   (kept as-is since you said leave stuff that’s just there)
+   ========================= */
 
 .projectGrid {
   width: 100%;
@@ -156,10 +234,9 @@
   padding: 0 24px;
   display: flex;
   flex-direction: column;
-  gap: 48px; /* space between rows */
+  gap: 48px;
 }
 
-/* Each project row: thumbnail on left, text on right */
 .projectGrid .block.project-thumb {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
@@ -168,25 +245,21 @@
   color: inherit;
 }
 
-/* Reset link hover color if needed */
 .projectGrid .block.project-thumb:hover h2 {
   text-decoration: underline;
 }
 
-/* Left column: thumbnail */
 .projectGrid .col.thumb {
   width: 100%;
 }
 
-/* Ratio wrapper for perfect square */
 .ratio-1-1 {
   position: relative;
   width: 100%;
-  padding-top: 100%; /* 1:1 aspect ratio */
+  padding-top: 100%;
   overflow: hidden;
 }
 
-/* Make iframe & img fill that square */
 .ratio-1-1 iframe,
 .ratio-1-1 img {
   position: absolute;
@@ -196,31 +269,30 @@
   border: 0;
 }
 
-/* Vimeo behaves like background video */
 .ratio-1-1 iframe {
   object-fit: cover;
-  pointer-events: none; /* feels like Fionn’s “background=1” */
+  pointer-events: none;
 }
 
-/* Poster image sits on top unless you hide/fade it with JS if you want */
 .ratio-1-1 img {
   object-fit: cover;
   display: block;
 }
 
-/* Right column: text */
 .block-info {
-  font-family: "Lettera", system-ui, -apple-system, BlinkMacSystemFont,
+  font-family:
+    "Lettera",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
     sans-serif;
 }
 
-/* Sticky text so it tracks as you scroll the grid */
 .block-info .sticky {
   position: sticky;
-  top: 80px; /* adjust to clear your nav */
+  top: 80px;
 }
 
-/* Titles + body */
 .block-info h2 {
   font-size: clamp(20px, 2.2vw, 28px);
   margin: 0 0 8px;
@@ -232,8 +304,6 @@
   line-height: 1.4;
   margin: 0;
 }
-
-/* ============= GRID FOOTER (EMAIL + IG) ============= */
 
 .projectGridFooter {
   display: flex;
@@ -253,9 +323,6 @@
   text-decoration: underline;
 }
 
-/* ============= RESPONSIVE ============= */
-
-/* Medium: tighten spacing slightly */
 @media (max-width: 1024px) {
   .projectGrid {
     padding: 0 20px;
@@ -271,7 +338,6 @@
   }
 }
 
-/* Small screens: stack image over text (like Fionn on mobile) */
 @media (max-width: 768px) {
   .projectGrid {
     padding: 0 16px;
@@ -292,37 +358,4 @@
     align-items: flex-start;
     padding-inline: 16px;
   }
-}
-
-.project-card-link {
-  color: inherit;
-  text-decoration: none;
-  display: block; /* optional but usually helpful for full-card links */
-  text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.project-card-link:hover,
-.project-card-link:focus {
-  color: inherit; /* prevents hover/purple/blue changes */
-  text-decoration: none;
-}
-
-.project-card-link {
-  color: inherit;
-  text-decoration: none;
-  display: block; /* Ensure it behaves as a container */
-  text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
-  /* Add back any height rule if you deleted one */
-  /* height: 100%; */
-}
-
-.project-desc {
-  color: #888888;
-}
-
-.work-frame {
-  border: none;
-  outline: none;
 }

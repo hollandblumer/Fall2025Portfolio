@@ -1,11 +1,84 @@
 // src/pages/ProjectPage.jsx
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+
 import { useNavigate, useParams, Link } from "react-router-dom";
 import DiamondTitle from "../../components/DiamondTitle.jsx";
 import ElasticMenu from "../../components/nav/ElasticMenu.jsx"; // 👈 bring in the menu/X
 import projectData from "../../assets/projectData.js";
 
 // Helper function (carried over from previous response)
+
+function LinkedInEmbed({ url }) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const oembedUrl = `https://www.linkedin.com/oembed?url=${encodeURIComponent(
+      url,
+    )}&format=json`;
+
+    fetch(oembedUrl)
+      .then((res) => res.json())
+      .then((json) => {
+        if (!cancelled) setData(json);
+      })
+      .catch(() => {
+        // if LinkedIn blocks it for any reason, we just fall back to a normal link
+        if (!cancelled) setData({ fallback: true });
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [url]);
+
+  // loading state (optional)
+  if (!data) {
+    return (
+      <a href={url} target="_blank" rel="noopener noreferrer">
+        Read the LinkedIn article
+      </a>
+    );
+  }
+
+  // fallback state
+  if (data.fallback) {
+    return (
+      <a href={url} target="_blank" rel="noopener noreferrer">
+        Read the LinkedIn article
+      </a>
+    );
+  }
+
+  return (
+    <a
+      className="linkedin-embed"
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open LinkedIn article: ${data.title}`}
+    >
+      {data.thumbnail_url && (
+        <img
+          src={data.thumbnail_url}
+          alt={data.title}
+          className="linkedin-embed-thumb"
+        />
+      )}
+      <div className="linkedin-embed-meta">
+        <h4 className="linkedin-embed-title">{data.title}</h4>
+        {data.author_name && (
+          <p className="linkedin-embed-author">{data.author_name}</p>
+        )}
+        {data.provider_name && (
+          <p className="linkedin-embed-provider">{data.provider_name}</p>
+        )}
+      </div>
+    </a>
+  );
+}
+
 const getLinkLabel = (href) => {
   try {
     const url = new URL(href);
@@ -74,7 +147,24 @@ export default function ProjectPage() {
             <h1>{title}</h1>
             {tagLine && <p>{tagLine}</p>}
           </div>
-          {hero?.image && (
+          {hero?.type === "instagram" && hero.embed && (
+            <div className="hero-embed">
+              <iframe
+                src={`https://www.instagram.com/p/${hero.embed
+                  .split("/p/")[1]
+                  .replace("/", "")}/embed`}
+                width="100%"
+                height="480"
+                frameBorder="0"
+                scrolling="no"
+                allowTransparency
+                allow="encrypted-media"
+                title={hero.alt || title}
+              />
+            </div>
+          )}
+
+          {hero?.image && !hero?.type && (
             <img
               src={hero.image}
               alt={hero.alt || title}
