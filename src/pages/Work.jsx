@@ -1,15 +1,9 @@
 // src/pages/Work.jsx
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ElasticMenu from "../components/nav/ElasticMenu";
-import VideoCloth from "../components/VideoCloth";
 import FilmGrainLayer from "../components/textures/FilmGrainLayer";
 import LoadingBlobs from "../components/loading/LoadingBlobs.jsx";
-import VideoSmear from "../components/VideoSmear.jsx";
-import VideoStretch from "../components/VideoStretch.jsx";
-import VideoStretchErrorBoundary from "../components/VideoStretchErrorBoundary.jsx";
-import VideoLiquidErrorBoundary from "../components/VideoLiquidErrorBoundary.jsx";
-import VideoStretch2 from "../components/VideoStretch2.jsx";
 
 export const projects = [
   {
@@ -24,12 +18,11 @@ export const projects = [
     posterSrc: new URL("../assets/images/checkerboard3d.jpeg", import.meta.url)
       .href,
   },
-
   {
     id: 2,
     slug: "katherinegroverfinejewelry",
     categories: ["featured", "for clients"],
-    title: "Animation for Katherine Grover Fine Jewelry",
+    title: "Canvas Particle Animation for Katherine Grover Fine Jewelry",
     description:
       "Canvas Particle Animation using jewels from Katherine Grover Fine Jewelry",
     type: "video",
@@ -50,7 +43,6 @@ export const projects = [
     posterSrc: new URL("../assets/images/floatinglibrary.png", import.meta.url)
       .href,
   },
-
   {
     id: 4,
     slug: "abstractolives",
@@ -63,7 +55,6 @@ export const projects = [
     posterSrc: new URL("../assets/images/abstractolives.jpeg", import.meta.url)
       .href,
   },
-
   {
     id: 5,
     slug: "chargepoint",
@@ -85,7 +76,6 @@ export const projects = [
       "https://hollandblumer.github.io/portfolio_videos/meredithnorvell.mp4",
     posterSrc: new URL("../assets/images/meredith.png", import.meta.url).href,
   },
-
   {
     id: 7,
     slug: "americanseasons",
@@ -121,7 +111,6 @@ export const projects = [
       import.meta.url,
     ).href,
   },
-
   {
     id: 10,
     slug: "cherylfudge",
@@ -133,7 +122,6 @@ export const projects = [
     videoSrc: "https://hollandblumer.github.io/portfolio_videos/cfudge.mp4",
     posterSrc: new URL("../assets/images/cheryl.png", import.meta.url).href,
   },
-
   {
     id: 11,
     slug: "uvsense",
@@ -167,7 +155,6 @@ export const projects = [
     videoSrc: "https://hollandblumer.github.io/portfolio_videos/partana.mp4",
     posterSrc: new URL("../assets/images/partana.png", import.meta.url).href,
   },
-
   {
     id: 14,
     slug: "aj",
@@ -191,24 +178,45 @@ export const projects = [
   },
 ];
 
+// Small helper: safe base url for local + GH pages
+const withBase = (path) => {
+  const base = import.meta.env.BASE_URL || "/";
+  const cleanBase = base.endsWith("/") ? base : `${base}/`;
+  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
+  return `${cleanBase}${cleanPath}`;
+};
+
 export default function Work() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("featured");
 
-  // NEW: loader state (hide when iframe loads)
+  // loader (hide when iframe loads; never hang)
   const [isLoading, setIsLoading] = useState(true);
   const loadStartRef = useRef(Date.now());
+  const killTimerRef = useRef(null);
 
-  // keep this src as a variable so loader can re-trigger if you ever change it
-  const workIframeSrc = "./SmearTextWork.html?text=WORK&scale=3.7";
+  // ✅ works on /work and GH pages too (public/SmearTextWork.html)
+  const workIframeSrc = useMemo(() => {
+    return `${withBase("SmearTextWork.html")}?text=WORK&scale=3.7`;
+  }, []);
 
-  // if src ever changes, show loader again
+  // Reset loader when iframe src changes (plus safety timeout)
   useEffect(() => {
     loadStartRef.current = Date.now();
     setIsLoading(true);
+
+    if (killTimerRef.current) window.clearTimeout(killTimerRef.current);
+    killTimerRef.current = window.setTimeout(() => {
+      setIsLoading(false);
+    }, 6500);
+
+    return () => {
+      if (killTimerRef.current) window.clearTimeout(killTimerRef.current);
+      killTimerRef.current = null;
+    };
   }, [workIframeSrc]);
 
-  // Optional: prevent scrolling while loading (same as Home)
+  // Prevent scrolling while loading
   useEffect(() => {
     document.body.style.overflow = isLoading ? "hidden" : "";
     return () => {
@@ -216,16 +224,36 @@ export default function Work() {
     };
   }, [isLoading]);
 
-  const visibleProjects = projects.filter((project) =>
-    activeFilter === "all" ? true : project.categories.includes(activeFilter),
-  );
+  const visibleProjects = useMemo(() => {
+    return projects.filter((project) =>
+      activeFilter === "all" ? true : project.categories.includes(activeFilter),
+    );
+  }, [activeFilter]);
+
+  // Video behavior: autoplay only a few, hover-play the rest
+  const handleEnter = useCallback((e, shouldAutoplay) => {
+    if (shouldAutoplay) return;
+    const v = e.currentTarget;
+    // don’t throw if browser blocks play
+    v.play?.().catch?.(() => {});
+  }, []);
+
+  const handleLeave = useCallback((e, shouldAutoplay) => {
+    if (shouldAutoplay) return;
+    const v = e.currentTarget;
+    v.pause?.();
+    try {
+      v.currentTime = 0;
+    } catch {
+      // ignore
+    }
+  }, []);
 
   return (
     <>
-      {/* NEW: overlay loader */}
       <LoadingBlobs show={isLoading} />
-
       <FilmGrainLayer />
+
       <main className="projects-section page">
         {/* Social icons */}
         <div className="mobile-social-icons">
@@ -309,13 +337,13 @@ export default function Work() {
             src={workIframeSrc}
             title="Squishy Letters"
             className="work-frame"
+            loading="eager"
             onLoad={() => {
               const elapsed = Date.now() - loadStartRef.current;
-              const MIN_DURATION = 3000; // match Home
-
+              const MIN_DURATION = 1200; // snappier than 3s, but still smooth
               const remaining = Math.max(MIN_DURATION - elapsed, 0);
 
-              setTimeout(() => {
+              window.setTimeout(() => {
                 setIsLoading(false);
               }, remaining);
             }}
@@ -339,13 +367,16 @@ export default function Work() {
           </div>
         </div>
 
-        {/* GRID of VideoCloth components */}
+        {/* GRID */}
         <div className="projects-grid">
-          {visibleProjects.map((project) => {
+          {visibleProjects.map((project, idx) => {
             const targetLink =
               project.slug === "partana"
                 ? "/templates"
                 : `/work/${project.slug}`;
+
+            // Autoplay only first few visible cards for performance
+            const shouldAutoplay = idx < 4 && project.type === "video";
 
             return (
               <Link
@@ -361,10 +392,20 @@ export default function Work() {
                       muted
                       loop
                       playsInline
-                      autoPlay
+                      preload={shouldAutoplay ? "metadata" : "none"}
+                      autoPlay={shouldAutoplay}
+                      onMouseEnter={(e) => handleEnter(e, shouldAutoplay)}
+                      onMouseLeave={(e) => handleLeave(e, shouldAutoplay)}
+                      onTouchStart={(e) => handleEnter(e, shouldAutoplay)}
+                      // keep iOS happy
+                      controls={false}
                     />
                   ) : (
-                    <img src={project.imageSrc} alt={project.title} />
+                    <img
+                      src={project.imageSrc}
+                      alt={project.title}
+                      loading="lazy"
+                    />
                   )}
                 </div>
                 <h3 className="project-title">{project.title}</h3>
