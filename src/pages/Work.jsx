@@ -336,16 +336,14 @@ export default function Work() {
             key={workIframeSrc}
             src={workIframeSrc}
             title="Squishy Letters"
-            className="work-frame"
+            className={`work-frame ${isLoading ? "is-hidden" : ""}`}
             loading="eager"
             onLoad={() => {
               const elapsed = Date.now() - loadStartRef.current;
-              const MIN_DURATION = 1200; // snappier than 3s, but still smooth
+              const MIN_DURATION = 1200;
               const remaining = Math.max(MIN_DURATION - elapsed, 0);
 
-              window.setTimeout(() => {
-                setIsLoading(false);
-              }, remaining);
+              window.setTimeout(() => setIsLoading(false), remaining);
             }}
             onError={() => setIsLoading(false)}
           />

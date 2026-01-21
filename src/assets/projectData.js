@@ -425,7 +425,7 @@ From there, I adjusted timing, speed, depth, and lighting so the motion felt slo
       "A Three.js hero concept designed for an author looking beyond traditional book websites. It was also featured on CodePen",
     tagLink: {
       label: "here",
-      href: "https://codepen.io/hollandblumer/pen/ZYQoBVe",
+      href: "https://codepen.io/hollandblumer/pen/QwWzyqm",
     },
     palette: { bg: "#e4eeefff", ink: "#101010ff" },
     hero: {
